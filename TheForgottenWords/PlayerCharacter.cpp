@@ -2,6 +2,7 @@
 
 
 #include "PlayerCharacter.h"
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -19,10 +20,19 @@ APlayerCharacter::APlayerCharacter()
 
 }
 
+void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+
+
+
+}
+
 // Called when the game starts or when spawned
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBeginOverlap);
 	
 }
 

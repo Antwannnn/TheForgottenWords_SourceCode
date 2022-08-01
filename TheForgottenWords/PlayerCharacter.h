@@ -11,6 +11,8 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 
+#include "Blueprint/UserWidget.h"
+
 #include "PlayerCharacter.generated.h"
 
 
@@ -25,6 +27,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		UCameraComponent* CameraView;
+	UPROPERTY(EditAnywhere, Category = "UI HUD")
+		TSubclassOf<UUserWidget> Cursor_Widget_Class;
+	UUserWidget* Cursor_Widget;
 
 	UFUNCTION()
 	void MoveForward(float axis);
@@ -38,6 +43,9 @@ public:
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UCameraShakeBase> CameraShake;
 
+	UFUNCTION()
+		void OnBeginOverlap(class UPrimitiveComponent* HitComp, class AActor* OtherActor,
+			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

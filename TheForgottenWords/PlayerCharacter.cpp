@@ -13,9 +13,12 @@ APlayerCharacter::APlayerCharacter()
 
 	GetCharacterMovement()->MaxWalkSpeed = (250.0f);
 
+
+	//FirstPerson CameraSetup
 	CameraView = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera View"));
 	CameraView->SetupAttachment(RootComponent);
 	CameraView->bUsePawnControlRotation = true;
+	CameraView->SetFieldOfView(100.0f);
 
 
 }

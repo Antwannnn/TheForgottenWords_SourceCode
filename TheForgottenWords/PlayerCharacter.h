@@ -35,7 +35,6 @@ public:
 	UFUNCTION()
 	void PlayCameraShake(float Scale);
 
-
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UCameraShakeBase> CameraShake;
 

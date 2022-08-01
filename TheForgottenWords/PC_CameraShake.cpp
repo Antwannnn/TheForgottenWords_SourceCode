@@ -16,7 +16,7 @@ UPC_CameraShake::UPC_CameraShake()
 	RotOscillation.Yaw.Amplitude = FMath::RandRange(0.04f, 0.05f);
 	RotOscillation.Yaw.Frequency = FMath::RandRange(0.04f, 0.05f);
 											 
-	RotOscillation.Roll.Amplitude = FMath::RandRange(0.04f, 0.05f);
+	RotOscillation.Roll.Amplitude = FMath::RandRange(0.04f, 0.06f);
 	RotOscillation.Roll.Frequency = FMath::RandRange(0.04f, 0.05f);
 
 

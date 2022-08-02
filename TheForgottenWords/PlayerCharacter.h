@@ -32,13 +32,16 @@ public:
 	UUserWidget* Interaction_Widget;
 
 	UFUNCTION()
-	void MoveForward(float axis);
+		void MoveForward(float axis);
 
 	UFUNCTION()
-	void MoveRight(float Axis);
+		void MoveRight(float Axis);
 
 	UFUNCTION()
-	void PlayCameraShake(float Scale);
+		void PlayCameraShake(float Scale);
+
+	UFUNCTION()
+		void DisplayInteractionWidget(int index, TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UCameraShakeBase> CameraShake;

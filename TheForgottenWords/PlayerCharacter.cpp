@@ -32,11 +32,13 @@ void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* Othe
 	if (OtherActor->ActorHasTag("Inspect")) 
 
 	{
-			
+		DisplayInteractionWidget(0, Interaction_Widget_Class, Interaction_Widget);
+		
 	}
 	if (OtherActor->ActorHasTag("Interaction"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Collided with Inspection Tag Box"));
+		DisplayInteractionWidget(1, Interaction_Widget_Class, Interaction_Widget);
+
 	}
 
 }
@@ -47,13 +49,6 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBeginOverlap);
-
-	if (Interaction_Widget_Class != nullptr)
-	{
-		Interaction_Widget = CreateWidget(GetWorld(), Interaction_Widget_Class);
-		Interaction_Widget->AddToViewport();
-
-	}
 	
 }
 
@@ -111,6 +106,27 @@ void APlayerCharacter::PlayCameraShake(float Scale)
 {
 
 	GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraShake(CameraShake, Scale);
+
+}
+
+void APlayerCharacter::DisplayInteractionWidget(int index, TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget)
+{
+	if (IsValid(WidgetClass))
+	{	
+		Widget->RemoveFromParent();
+		SelectedIndex = index;
+		Widget = CreateWidget(GetWorld(), WidgetClass);
+
+		if (Widget != nullptr) 
+		{
+
+			Widget->AddToViewport();
+		}
+
+	}
+
+
+
 
 }
 

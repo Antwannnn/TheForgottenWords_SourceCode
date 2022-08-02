@@ -3,6 +3,7 @@
 
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Blueprint/UserWidget.h"
 
 
 // Sets default values
@@ -20,13 +21,23 @@ APlayerCharacter::APlayerCharacter()
 	CameraView->bUsePawnControlRotation = true;
 	CameraView->SetFieldOfView(100.0f);
 
+	AutoPossessPlayer = EAutoReceiveInput::Player0;
+
 
 }
 
 void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 
+	if (OtherActor->ActorHasTag("Inspect")) 
 
+	{
+			
+	}
+	if (OtherActor->ActorHasTag("Interaction"))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Collided with Inspection Tag Box"));
+	}
 
 }
 
@@ -36,6 +47,13 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBeginOverlap);
+
+	if (Interaction_Widget_Class != nullptr)
+	{
+		Interaction_Widget = CreateWidget(GetWorld(), Interaction_Widget_Class);
+		Interaction_Widget->AddToViewport();
+
+	}
 	
 }
 

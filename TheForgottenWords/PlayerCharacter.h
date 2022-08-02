@@ -28,8 +28,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		UCameraComponent* CameraView;
 	UPROPERTY(EditAnywhere, Category = "UI HUD")
-		TSubclassOf<UUserWidget> Cursor_Widget_Class;
-	UUserWidget* Cursor_Widget;
+		TSubclassOf<UUserWidget> Interaction_Widget_Class;
+	UUserWidget* Interaction_Widget;
 
 	UFUNCTION()
 	void MoveForward(float axis);
@@ -50,6 +50,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+private:
+
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		int SelectedIndex = 1;
 
 public:	
 	// Called every frame

@@ -41,7 +41,7 @@ public:
 		void PlayCameraShake(float Scale);
 
 	UFUNCTION()
-		void DisplayInteractionWidget(int index, TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
+		void DisplayWidget(int index, TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UCameraShakeBase> CameraShake;

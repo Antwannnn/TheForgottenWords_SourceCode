@@ -109,11 +109,11 @@ void APlayerCharacter::PlayCameraShake(float Scale)
 
 }
 
+
 void APlayerCharacter::DisplayWidget(int index, TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget)
 {
 	if (IsValid(WidgetClass))
 	{	
-		Widget->RemoveFromParent();
 		SelectedIndex = index;
 		Widget = CreateWidget(GetWorld(), WidgetClass);
 
@@ -123,10 +123,20 @@ void APlayerCharacter::DisplayWidget(int index, TSubclassOf<UUserWidget> WidgetC
 		}
 
 	}
+}
+//DisplayWidget method declaration overloading
+void APlayerCharacter::DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget)
+{
+	if (IsValid(WidgetClass))
+	{
+		Widget = CreateWidget(GetWorld(), WidgetClass);
 
+		if (Widget != nullptr)
+		{
+			Widget->AddToViewport();
+		}
 
-
-
+	}
 }
 
 

@@ -40,8 +40,10 @@ public:
 	UFUNCTION()
 		void PlayCameraShake(float Scale);
 
-	UFUNCTION()
-		void DisplayWidget(int index, TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
+
+	void DisplayWidget(int index, TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
+	//DisplayWidget Method overloading
+	void DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UCameraShakeBase> CameraShake;

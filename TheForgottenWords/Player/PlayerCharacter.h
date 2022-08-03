@@ -38,6 +38,9 @@ public:
 		void MoveRight(float Axis);
 
 	UFUNCTION()
+		void InteractPressed();
+
+	UFUNCTION()
 		void PlayCameraShake(float Scale);
 
 

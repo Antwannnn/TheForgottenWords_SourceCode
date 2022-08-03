@@ -4,6 +4,7 @@
 #include "PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Blueprint/UserWidget.h"
+#include "DrawDebugHelpers.h"
 
 
 // Sets default values
@@ -69,8 +70,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
 	//Jump PlayerInputComponent
-	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &ACharacter::Jump);
-	PlayerInputComponent->BindAction("Jump", IE_Released, this, &ACharacter::Jump);
+	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::InteractPressed);
 
 	//Move Forward and move right PlayerInputComponent
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
@@ -99,6 +99,28 @@ void APlayerCharacter::MoveRight(float Axis)
 	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(Direction, Axis);
 	APlayerCharacter::PlayCameraShake(Axis);
+
+}
+
+void APlayerCharacter::InteractPressed()
+{
+
+	FVector Location;
+	FRotator Rotation;
+	FHitResult HitResult;
+
+	GetController()->GetPlayerViewPoint(Location, Rotation);
+
+	FVector StartPoint = Location;
+	FVector EndPoint = StartPoint + (Rotation.Vector() * 2000);
+
+	FCollisionQueryParams TraceParams;
+
+	GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, EndPoint, ECC_Visibility, TraceParams);
+
+	DrawDebugLine(GetWorld(), StartPoint, EndPoint, FColor::Orange, false, 2.0);
+
+
 
 }
 

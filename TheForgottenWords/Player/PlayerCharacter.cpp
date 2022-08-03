@@ -104,8 +104,14 @@ void APlayerCharacter::MoveRight(float Axis)
 
 void APlayerCharacter::InteractPressed()
 {
+	
 
-	Linetrace(400.0f);
+	if (AActor* TargetActor = Linetrace(2000)) 
+	{
+		GetWorld()->DestroyActor(TargetActor);
+	}
+		
+
 
 }
 
@@ -146,7 +152,7 @@ void APlayerCharacter::DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUser
 	}
 }
 
-void APlayerCharacter::Linetrace_Implementation(float TraceDistance)
+AActor* APlayerCharacter::Linetrace_Implementation(float TraceDistance)
 {
 
 	FVector Location;
@@ -159,6 +165,7 @@ void APlayerCharacter::Linetrace_Implementation(float TraceDistance)
 	FVector EndPoint = StartPoint + (Rotation.Vector() * TraceDistance);
 
 	FCollisionQueryParams TraceParams;
+	TraceParams.AddIgnoredActor(this);
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, EndPoint, ECC_Visibility, TraceParams);
 
@@ -166,12 +173,12 @@ void APlayerCharacter::Linetrace_Implementation(float TraceDistance)
 
 	if (bHit) 
 	{
-
-		DrawDebugBox(GetWorld(), HitResult.ImpactPoint, FVector(5, 5, 5), FColor::Emerald, false, 2.0f);
-
+		return HitResult.GetActor();
 	}
+	return nullptr;
 
 }
+
 
 
 

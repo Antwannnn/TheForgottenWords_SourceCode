@@ -60,8 +60,12 @@ protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintNativeEvent)
-		void Linetrace(float TraceDistance);
-		void Linetrace_Implementation(float TraceDistance);
+		AActor* Linetrace(float TraceDistance);
+		AActor* Linetrace_Implementation(float TraceDistance);
+
+	UPROPERTY()
+		AActor* HitActor;
+
 
 private:
 

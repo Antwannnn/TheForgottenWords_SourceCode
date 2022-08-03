@@ -15,7 +15,7 @@ public:
 	// Sets default values for this actor's properties
 	ACollectableItem();
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = Rendering)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Rendering)
 		UStaticMeshComponent* Mesh;
 
 protected:

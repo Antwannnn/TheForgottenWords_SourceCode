@@ -27,6 +27,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		UCameraComponent* CameraView;
+
 	UPROPERTY(EditAnywhere, Category = "UI HUD")
 		TSubclassOf<UUserWidget> Interaction_Widget_Class;
 	UUserWidget* Interaction_Widget;
@@ -57,6 +58,10 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintNativeEvent)
+		void Linetrace(float TraceDistance);
+		void Linetrace_Implementation(float TraceDistance);
 
 private:
 

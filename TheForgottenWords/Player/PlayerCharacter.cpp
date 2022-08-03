@@ -105,22 +105,7 @@ void APlayerCharacter::MoveRight(float Axis)
 void APlayerCharacter::InteractPressed()
 {
 
-	FVector Location;
-	FRotator Rotation;
-	FHitResult HitResult;
-
-	GetController()->GetPlayerViewPoint(Location, Rotation);
-
-	FVector StartPoint = Location;
-	FVector EndPoint = StartPoint + (Rotation.Vector() * 2000);
-
-	FCollisionQueryParams TraceParams;
-
-	GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, EndPoint, ECC_Visibility, TraceParams);
-
-	DrawDebugLine(GetWorld(), StartPoint, EndPoint, FColor::Orange, false, 2.0);
-
-
+	Linetrace(400.0f);
 
 }
 
@@ -160,5 +145,33 @@ void APlayerCharacter::DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUser
 
 	}
 }
+
+void APlayerCharacter::Linetrace_Implementation(float TraceDistance)
+{
+
+	FVector Location;
+	FRotator Rotation;
+	FHitResult HitResult;
+
+	GetController()->GetPlayerViewPoint(Location, Rotation);
+
+	FVector StartPoint = Location;
+	FVector EndPoint = StartPoint + (Rotation.Vector() * TraceDistance);
+
+	FCollisionQueryParams TraceParams;
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, EndPoint, ECC_Visibility, TraceParams);
+
+	DrawDebugLine(GetWorld(), StartPoint, EndPoint, FColor::Orange, false, 2.0);
+
+	if (bHit) 
+	{
+
+		DrawDebugBox(GetWorld(), HitResult.ImpactPoint, FVector(5, 5, 5), FColor::Emerald, false, 2.0f);
+
+	}
+
+}
+
 
 

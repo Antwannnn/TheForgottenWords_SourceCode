@@ -55,6 +55,7 @@ public:
 	UFUNCTION()
 		void OnBeginOverlap(class UPrimitiveComponent* HitComp, class AActor* OtherActor,
 			class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -63,8 +64,6 @@ protected:
 		AActor* Linetrace(float TraceDistance);
 		AActor* Linetrace_Implementation(float TraceDistance);
 
-	UPROPERTY()
-		AActor* HitActor;
 
 
 private:

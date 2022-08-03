@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Blueprint/UserWidget.h"
 #include "DrawDebugHelpers.h"
+#include <TheForgottenWords/Gameplay/InteractableItem.h>
 
 
 // Sets default values
@@ -104,15 +105,13 @@ void APlayerCharacter::MoveRight(float Axis)
 
 void APlayerCharacter::InteractPressed()
 {
-	
 
 	if (AActor* TargetActor = Linetrace(2000)) 
 	{
-		GetWorld()->DestroyActor(TargetActor);
+		if(Cast<AInteractableItem>(TargetActor))
+			GetWorld()->DestroyActor(TargetActor);
 	}
 		
-
-
 }
 
 void APlayerCharacter::PlayCameraShake(float Scale)

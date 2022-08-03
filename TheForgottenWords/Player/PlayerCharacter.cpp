@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "DrawDebugHelpers.h"
 #include <TheForgottenWords/Gameplay/InteractableItem.h>
+#include <TheForgottenWords/Gameplay/CollectableItem.h>
 
 
 // Sets default values
@@ -31,17 +32,7 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 
-	if (OtherActor->ActorHasTag("Inspect")) 
-
-	{
-		DisplayWidget(0, Interaction_Widget_Class, Interaction_Widget);
-		
-	}
-	if (OtherActor->ActorHasTag("Interaction"))
-	{
-		DisplayWidget(1, Interaction_Widget_Class, Interaction_Widget);
-
-	}
+	
 
 }
 
@@ -59,6 +50,23 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (AActor* TargetActor = Linetrace(400))
+	{
+		if (!bDisplayed) {
+
+			AInteractableItem* pCastingResult = Cast<AInteractableItem>(TargetActor);
+
+			if (pCastingResult)
+			{
+				bDisplayed = true;
+				SelectedIndex = 0;
+				DisplayWidget(SelectedIndex, Interaction_Widget_Class, Interaction_Widget);
+			}
+
+		}
+	}
+
+
 }
 
 // Called to bind functionality to input
@@ -70,7 +78,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
 
-	//Jump PlayerInputComponent
+	//Interact PlayerInputComponent
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::InteractPressed);
 
 	//Move Forward and move right PlayerInputComponent
@@ -106,12 +114,14 @@ void APlayerCharacter::MoveRight(float Axis)
 void APlayerCharacter::InteractPressed()
 {
 
-	if (AActor* TargetActor = Linetrace(2000)) 
+	if (AActor* TargetActor = Linetrace(400))
 	{
-		if(Cast<AInteractableItem>(TargetActor))
-			GetWorld()->DestroyActor(TargetActor);
+		if (Cast<AInteractableItem>(TargetActor))
+		{
+
+		}
+
 	}
-		
 }
 
 void APlayerCharacter::PlayCameraShake(float Scale)
@@ -125,18 +135,18 @@ void APlayerCharacter::PlayCameraShake(float Scale)
 void APlayerCharacter::DisplayWidget(int index, TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget)
 {
 	if (IsValid(WidgetClass))
-	{	
+	{
 		SelectedIndex = index;
 		Widget = CreateWidget(GetWorld(), WidgetClass);
 
-		if (Widget != nullptr) 
+		if (Widget != nullptr)
 		{
 			Widget->AddToViewport();
 		}
 
 	}
 }
-//DisplayWidget method declaration overloading
+//DisplayWidget method implementation overloading
 void APlayerCharacter::DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget)
 {
 	if (IsValid(WidgetClass))
@@ -167,8 +177,6 @@ AActor* APlayerCharacter::Linetrace_Implementation(float TraceDistance)
 	TraceParams.AddIgnoredActor(this);
 
 	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, EndPoint, ECC_Visibility, TraceParams);
-
-	DrawDebugLine(GetWorld(), StartPoint, EndPoint, FColor::Orange, false, 2.0);
 
 	if (bHit) 
 	{

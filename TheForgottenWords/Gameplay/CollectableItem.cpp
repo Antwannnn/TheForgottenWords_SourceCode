@@ -16,6 +16,7 @@ ACollectableItem::ACollectableItem()
 
 void ACollectableItem::PlayTakeSound(USoundBase* Sound)
 {
+
 	if (Sound != nullptr)
 	{
 		UGameplayStatics::PlaySound2D(this, Sound);
@@ -27,9 +28,8 @@ void ACollectableItem::PlayTakeSound(USoundBase* Sound)
 // Called when the game starts or when spawned
 void ACollectableItem::BeginPlay()
 {
-	Super::BeginPlay();
 
-	PlayTakeSound(TakeSound);
+	Super::BeginPlay();
 	
 }
 

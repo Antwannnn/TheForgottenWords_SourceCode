@@ -19,7 +19,8 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Rendering)
 		UStaticMeshComponent* Mesh;
 
-	void PlayTakeSound(USoundBase* Sound);
+	UFUNCTION(BlueprintCallable)
+		void PlayTakeSound(USoundBase* Sound);
 
 
 protected:

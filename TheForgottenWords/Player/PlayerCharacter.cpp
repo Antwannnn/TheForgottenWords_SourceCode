@@ -50,22 +50,25 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (AActor* TargetActor = Linetrace(400))
+	AActor* TargetActor = Linetrace(400);
+
+	if (TargetActor)
 	{
-		if (!bDisplayed) {
 
-			AInteractableItem* pCastingResult = Cast<AInteractableItem>(TargetActor);
+		if (AInteractableItem* pCastingResult = Cast<AInteractableItem>(TargetActor))
+		{
+			SelectedIndex = 1;
+		}
+		else if(ACollectableItem* pCastingResult2 = Cast<ACollectableItem>(TargetActor))
+		{
 
-			if (pCastingResult)
-			{
-				bDisplayed = true;
-				SelectedIndex = 0;
-				DisplayWidget(SelectedIndex, Interaction_Widget_Class, Interaction_Widget);
-			}
+			SelectedIndex = 0;
 
 		}
+		DisplayWidget(SelectedIndex, Interaction_Widget_Class, Interaction_Widget);
 	}
 
+	
 
 }
 

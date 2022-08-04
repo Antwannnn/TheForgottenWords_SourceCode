@@ -52,8 +52,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<UCameraShakeBase> CameraShake;
 
-	UPROPERTY()
-		bool bDisplayed = false;
+	bool bDisplayed = false;
 
 	UFUNCTION()
 		void OnBeginOverlap(class UPrimitiveComponent* HitComp, class AActor* OtherActor,

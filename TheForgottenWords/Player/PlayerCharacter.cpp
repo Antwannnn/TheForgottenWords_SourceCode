@@ -65,7 +65,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 			SelectedIndex = 0;
 
 		}
-		DisplayWidget(SelectedIndex, Interaction_Widget_Class, Interaction_Widget);
+		DisplayWidget(Interaction_Widget_Class, Interaction_Widget);
 	}
 
 	
@@ -135,21 +135,6 @@ void APlayerCharacter::PlayCameraShake(float Scale)
 }
 
 
-void APlayerCharacter::DisplayWidget(int index, TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget)
-{
-	if (IsValid(WidgetClass))
-	{
-		SelectedIndex = index;
-		Widget = CreateWidget(GetWorld(), WidgetClass);
-
-		if (Widget != nullptr)
-		{
-			Widget->AddToViewport();
-		}
-
-	}
-}
-//DisplayWidget method implementation overloading
 void APlayerCharacter::DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget)
 {
 	if (IsValid(WidgetClass))

@@ -45,8 +45,6 @@ public:
 		void PlayCameraShake(float Scale);
 
 
-	void DisplayWidget(int index, TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
-	//DisplayWidget Method overloading
 	void DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
 
 	UPROPERTY(EditAnywhere)

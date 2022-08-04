@@ -55,11 +55,11 @@ void APlayerCharacter::Tick(float DeltaTime)
 	if (TargetActor)
 	{
 
-		if (AInteractableItem* pCastingResult = Cast<AInteractableItem>(TargetActor))
+		if (AInteractableItem* pInteractableCastingResult = Cast<AInteractableItem>(TargetActor))
 		{
 			SelectedIndex = 1;
 		}
-		else if(ACollectableItem* pCastingResult2 = Cast<ACollectableItem>(TargetActor))
+		else if(ACollectableItem* pCollectableCastingResult = Cast<ACollectableItem>(TargetActor))
 		{
 
 			SelectedIndex = 0;

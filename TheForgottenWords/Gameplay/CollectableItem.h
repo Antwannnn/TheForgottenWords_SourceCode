@@ -15,12 +15,29 @@ public:
 	// Sets default values for this actor's properties
 	ACollectableItem();
 
+	//All the uproperty that I will be using for the collectable item.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Rendering)
 		UStaticMeshComponent* Mesh;
+
+	void PlayTakeSound(USoundBase* Sound);
+
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		FText Title;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		FText Description;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		bool bTakeable = false;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+		USoundBase* TakeSound;
 
 public:	
 	// Called every frame

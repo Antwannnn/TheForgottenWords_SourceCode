@@ -50,7 +50,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	AActor* TargetActor = Linetrace(400);
+	AActor* TargetActor = Linetrace(125);
 
 	if (TargetActor)
 	{

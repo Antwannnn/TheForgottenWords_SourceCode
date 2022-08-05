@@ -47,7 +47,7 @@ public:
 
 	void DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "CameraManager")
 		TSubclassOf<UCameraShakeBase> CameraShake;
 
 	bool bDisplayed = false;

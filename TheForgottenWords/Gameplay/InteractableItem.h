@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+
 #include "InteractableItem.generated.h"
 
 UCLASS()
@@ -22,8 +23,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "UI HUD")
 		FText Text;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Transform")
+		bool ApplyTransform;
+
+	UPROPERTY(EditAnywhere, meta = (EditCondition = "ApplyTransform"), Category = "Transform")
+		FTransform ObjectTransform;
 
 public:	
 	// Called every frame

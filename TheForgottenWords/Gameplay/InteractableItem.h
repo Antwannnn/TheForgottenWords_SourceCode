@@ -25,6 +25,9 @@ public:
 	UFUNCTION()
 		void TimelineProgress(float Value);
 
+	UFUNCTION(BlueprintCallable)
+		void PlayAnimationTimeline();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -38,10 +41,13 @@ protected:
 	UPROPERTY(EditAnywhere, meta = (EditCondition = "ApplyTransform"), Category = "Timeline")
 		FTransform ObjectTransform;
 
-	FTimeline CurveFTimeline;
+	FTimeline CurveTimeline;
 
 	UPROPERTY(EditAnywhere, Category = "Timeline", meta = (EditCondition = "ApplyTransform"))
 		UCurveFloat* CurveFloat;
+
+	UPROPERTY(EditAnywhere, Category = "Timeline", meta = (EditCondition = "ApplyTransform"))
+		float Rate;
 
 	UPROPERTY()
 		FVector StartLoc;
@@ -49,8 +55,11 @@ protected:
 	UPROPERTY()
 		FVector EndLoc;
 
-	UPROPERTY(EditAnywhere, meta = (EditCondition = "ApplyTransform"), Category = "Timeline")
-		float ZOffset;
+	UPROPERTY()
+		FRotator StartRot;
+
+	UPROPERTY()
+		FRotator EndRot;
 
 public:	
 	// Called every frame

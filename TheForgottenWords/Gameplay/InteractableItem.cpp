@@ -14,6 +14,10 @@ AInteractableItem::AInteractableItem()
 
 }
 
+void AInteractableItem::TimelineProgress(float Value)
+{
+}
+
 // Called when the game starts or when spawned
 void AInteractableItem::BeginPlay()
 {

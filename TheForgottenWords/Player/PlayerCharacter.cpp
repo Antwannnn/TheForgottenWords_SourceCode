@@ -24,6 +24,10 @@ APlayerCharacter::APlayerCharacter()
 	CameraView->bUsePawnControlRotation = true;
 	CameraView->SetFieldOfView(100.0f);
 
+	ViewLocation = CreateDefaultSubobject<USphereComponent>(TEXT("ViewLocation"));
+	ViewLocation->SetupAttachment(CameraView);
+	ViewLocation->SetRelativeScale3D(FVector(0.3, 0.3, 0.3));
+
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
 

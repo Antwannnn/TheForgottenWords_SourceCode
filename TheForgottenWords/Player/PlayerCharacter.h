@@ -10,6 +10,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/SphereComponent.h"
 
 #include "Blueprint/UserWidget.h"
 
@@ -27,6 +28,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
 		UCameraComponent* CameraView;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		USphereComponent* ViewLocation;
 
 	UPROPERTY(EditAnywhere, Category = "UI HUD")
 		TSubclassOf<UUserWidget> Interaction_Widget_Class;

@@ -11,6 +11,7 @@
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SphereComponent.h"
+#include "Components/TimelineComponent.h"
 
 #include "Blueprint/UserWidget.h"
 
@@ -48,11 +49,26 @@ public:
 	UFUNCTION()
 		void PlayCameraShake(float Scale);
 
+	UFUNCTION()
+		void TimelineProgress(float Value);
+
 
 	void DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
 
 	UPROPERTY(EditAnywhere, Category = "CameraManager")
 		TSubclassOf<UCameraShakeBase> CameraShake;
+
+	UPROPERTY(EditAnywhere, Category = "Inspection")
+		bool bZoom = false;
+
+	UPROPERTY(EditAnywhere, Category = "Inspection")
+		UCurveFloat* CurveFloat;
+
+	UPROPERTY(EditAnywhere, Category = "Inspection")
+		float PlayRate = 1.0f;
+
+	UPROPERTY()
+		float FadeIn;
 
 	bool bDisplayed = false;
 
@@ -67,6 +83,25 @@ protected:
 	UFUNCTION(BlueprintNativeEvent)
 		AActor* Linetrace(float TraceDistance);
 		AActor* Linetrace_Implementation(float TraceDistance);
+
+		UFUNCTION()
+			void PlayInspectionAnimation(AActor* Target);
+
+	FTimeline CurveTimeline;
+
+	FOnTimelineFloat InterpFunction;
+
+	UPROPERTY()
+		FVector ObjectLoc;
+
+	UPROPERTY()
+		FRotator ObjectRot;
+
+	UPROPERTY()
+		FRotator NewRot;
+
+	AActor* ActorToInspect;
+
 
 
 

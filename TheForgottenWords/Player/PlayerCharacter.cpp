@@ -22,11 +22,13 @@ APlayerCharacter::APlayerCharacter()
 	CameraView = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera View"));
 	CameraView->SetupAttachment(RootComponent);
 	CameraView->bUsePawnControlRotation = true;
+	CameraView->SetRelativeLocation(FVector(0.0f, 0.0f, 70.0f));
 	CameraView->SetFieldOfView(100.0f);
 
 	ViewLocation = CreateDefaultSubobject<USphereComponent>(TEXT("ViewLocation"));
 	ViewLocation->SetupAttachment(CameraView);
-	ViewLocation->SetRelativeScale3D(FVector(0.3, 0.3, 0.3));
+	ViewLocation->InitSphereRadius(10.0f);
+	ViewLocation->SetRelativeLocation(FVector(24.0f, -3.0f, 1.0f));
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
@@ -53,6 +55,8 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	CurveTimeline.TickTimeline(DeltaTime);
 
 	AActor* TargetActor = Linetrace(125);
 
@@ -123,8 +127,28 @@ void APlayerCharacter::InteractPressed()
 
 	if (AActor* TargetActor = Linetrace(400))
 	{
-		if (Cast<AInteractableItem>(TargetActor))
+
+		if (!bZoom) {
+
+			if (Cast<ACollectableItem>(TargetActor))
+			{
+				
+				if (CurveFloat)
+				{
+					ActorToInspect = TargetActor;
+					PlayInspectionAnimation(ActorToInspect);
+
+				}
+
+
+			}
+
+		}
+		else 
 		{
+			CurveTimeline.Reverse();
+			GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+			bZoom = false;
 
 		}
 
@@ -135,6 +159,17 @@ void APlayerCharacter::PlayCameraShake(float Scale)
 {
 
 	GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraShake(CameraShake, Scale);
+
+}
+
+void APlayerCharacter::TimelineProgress(float Value)
+{
+
+	FadeIn = Value;
+	FVector NewLocation = FMath::Lerp(ObjectLoc, ViewLocation->GetComponentLocation(), FadeIn);
+	FRotator NewRotation = FMath::Lerp(ObjectRot, NewRot, FadeIn);
+	ActorToInspect->SetActorLocationAndRotation(NewLocation, NewRotation);
+	
 
 }
 
@@ -177,6 +212,23 @@ AActor* APlayerCharacter::Linetrace_Implementation(float TraceDistance)
 	return nullptr;
 
 }
+
+void APlayerCharacter::PlayInspectionAnimation(AActor* Target)
+{
+	InterpFunction.BindUFunction(this, FName("TimelineProgress"));
+
+	CurveTimeline.AddInterpFloat(CurveFloat, InterpFunction);
+	CurveTimeline.SetPlayRate(PlayRate);
+
+	ObjectLoc = Target->GetActorLocation();
+	ObjectRot = Target->GetActorRotation();
+
+	CurveTimeline.PlayFromStart();
+	GetCharacterMovement()->DisableMovement();
+	bZoom = true;
+}
+
+
 
 
 

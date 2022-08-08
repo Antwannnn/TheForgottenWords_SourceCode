@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Components/TimelineComponent.h"
+#include "Components/SceneComponent.h"
+
 
 #include "CollectableItem.generated.h"
 
@@ -20,6 +22,9 @@ public:
 	//All the uproperty that I will be using for the collectable item.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Rendering)
 		UStaticMeshComponent* Mesh;
+ 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		USceneComponent* DefaultSceneRoot;
 
 	UFUNCTION(BlueprintCallable)
 		void PlayTakeSound(USoundBase* Sound);

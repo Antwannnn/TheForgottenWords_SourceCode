@@ -28,7 +28,7 @@ APlayerCharacter::APlayerCharacter()
 	ViewLocation = CreateDefaultSubobject<USphereComponent>(TEXT("ViewLocation"));
 	ViewLocation->SetupAttachment(CameraView);
 	ViewLocation->InitSphereRadius(10.0f);
-	ViewLocation->SetRelativeLocation(FVector(24.0f, -3.0f, 1.0f));
+	ViewLocation->SetRelativeLocation(FVector(45.0f, 0.0f, 1.0f));
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
@@ -58,16 +58,16 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	CurveTimeline.TickTimeline(DeltaTime);
 
-	AActor* TargetActor = Linetrace(125);
+	AActor* AimedActor = Linetrace(125);
 
-	if (TargetActor)
+	if (AimedActor)
 	{
 
-		if (AInteractableItem* pInteractableCastingResult = Cast<AInteractableItem>(TargetActor))
+		if (AInteractableItem* pInteractableCastingResult = Cast<AInteractableItem>(AimedActor))
 		{
 			SelectedIndex = 1;
 		}
-		else if(ACollectableItem* pCollectableCastingResult = Cast<ACollectableItem>(TargetActor))
+		else if(ACollectableItem* pCollectableCastingResult = Cast<ACollectableItem>(AimedActor))
 		{
 
 			SelectedIndex = 0;
@@ -85,9 +85,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	//Turn Up/Right PlayerInputComponent
-	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
+	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::TurnUp);
+	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::TurnLeft);
 
 	//Interact PlayerInputComponent
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::InteractPressed);
@@ -125,9 +124,10 @@ void APlayerCharacter::MoveRight(float Axis)
 void APlayerCharacter::InteractPressed()
 {
 
-	if (AActor* TargetActor = Linetrace(400))
-	{
+	TargetActor = Linetrace(400);
 
+	if (TargetActor)
+	{
 		if (!bZoom) {
 
 			if (Cast<ACollectableItem>(TargetActor))
@@ -135,8 +135,7 @@ void APlayerCharacter::InteractPressed()
 				
 				if (CurveFloat)
 				{
-					ActorToInspect = TargetActor;
-					PlayInspectionAnimation(ActorToInspect);
+					PlayInspectionAnimation(TargetActor);
 
 				}
 
@@ -146,9 +145,10 @@ void APlayerCharacter::InteractPressed()
 		}
 		else 
 		{
+			bZoom = false;
 			CurveTimeline.Reverse();
 			GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
-			bZoom = false;
+
 
 		}
 
@@ -168,8 +168,48 @@ void APlayerCharacter::TimelineProgress(float Value)
 	FadeIn = Value;
 	FVector NewLocation = FMath::Lerp(ObjectLoc, ViewLocation->GetComponentLocation(), FadeIn);
 	FRotator NewRotation = FMath::Lerp(ObjectRot, NewRot, FadeIn);
-	ActorToInspect->SetActorLocationAndRotation(NewLocation, NewRotation);
+	TargetActor->SetActorLocationAndRotation(NewLocation, NewRotation);
 	
+
+}
+
+void APlayerCharacter::TurnLeft(float Value)
+{
+
+	if (bZoom)
+	{
+		const FRotator YawRotation(0.0f, (Value * -1.0f), 0.0f);
+		FRotator CombinedRotators = YawRotation + TargetActor->GetActorRotation();
+		NewRot = CombinedRotators;
+		TargetActor->SetActorRotation(CombinedRotators);
+
+	}
+	else
+	{
+
+		AddControllerYawInput(Value);
+
+	}
+		
+
+
+}
+
+void APlayerCharacter::TurnUp(float Value)
+{
+	if (bZoom)
+	{
+		const FRotator YawRotation(Value, 0.0f, 0.0f);
+		FRotator CombinedRotators = YawRotation + TargetActor->GetActorRotation();
+		TargetActor->SetActorRotation(CombinedRotators);
+	}
+	else
+	{
+
+		AddControllerPitchInput(Value);
+
+	}
+
 
 }
 
@@ -215,6 +255,7 @@ AActor* APlayerCharacter::Linetrace_Implementation(float TraceDistance)
 
 void APlayerCharacter::PlayInspectionAnimation(AActor* Target)
 {
+	bZoom = true;
 	InterpFunction.BindUFunction(this, FName("TimelineProgress"));
 
 	CurveTimeline.AddInterpFloat(CurveFloat, InterpFunction);
@@ -225,7 +266,6 @@ void APlayerCharacter::PlayInspectionAnimation(AActor* Target)
 
 	CurveTimeline.PlayFromStart();
 	GetCharacterMovement()->DisableMovement();
-	bZoom = true;
 }
 
 

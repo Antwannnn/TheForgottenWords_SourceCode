@@ -52,13 +52,19 @@ public:
 	UFUNCTION()
 		void TimelineProgress(float Value);
 
+	UFUNCTION(BlueprintCallable)
+		void TurnLeft(float Value);
+
+	UFUNCTION(BlueprintCallable)
+		void TurnUp(float Value);
+
 
 	void DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
 
 	UPROPERTY(EditAnywhere, Category = "CameraManager")
 		TSubclassOf<UCameraShakeBase> CameraShake;
 
-	UPROPERTY(EditAnywhere, Category = "Inspection")
+	UPROPERTY(BlueprintReadOnly)
 		bool bZoom = false;
 
 	UPROPERTY(EditAnywhere, Category = "Inspection")
@@ -84,8 +90,8 @@ protected:
 		AActor* Linetrace(float TraceDistance);
 		AActor* Linetrace_Implementation(float TraceDistance);
 
-		UFUNCTION()
-			void PlayInspectionAnimation(AActor* Target);
+	UFUNCTION()
+		void PlayInspectionAnimation(AActor* Target);
 
 	FTimeline CurveTimeline;
 
@@ -100,7 +106,7 @@ protected:
 	UPROPERTY()
 		FRotator NewRot;
 
-	AActor* ActorToInspect;
+	AActor* TargetActor;
 
 
 

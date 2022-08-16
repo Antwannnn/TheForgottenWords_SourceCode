@@ -28,7 +28,7 @@ APlayerCharacter::APlayerCharacter()
 	ViewLocation = CreateDefaultSubobject<USphereComponent>(TEXT("ViewLocation"));
 	ViewLocation->SetupAttachment(CameraView);
 	ViewLocation->InitSphereRadius(10.0f);
-	ViewLocation->SetRelativeLocation(FVector(45.0f, 0.0f, 1.0f));
+	ViewLocation->SetRelativeLocation(FVector(30.0f, 0.0f, 1.0f));
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
 
@@ -138,20 +138,43 @@ void APlayerCharacter::InteractPressed()
 		{	
 			TargetActor = Linetrace(125);
 
-			if (Cast<ACollectableItem>(TargetActor) && CurveFloat && TargetActor)
+			if (ACollectableItem* CastingResult = Cast<ACollectableItem>(TargetActor))
 			{
+				if (CurveFloat && TargetActor)
+				{
 
 					bZoom = true;
 					bInteracting = true;
 					GetCharacterMovement()->DisableMovement();
 					PlayInspectionAnimation(TargetActor);
-						
+
+				}
+					
 			}
 
 		}
 		else
 		{
-			CurveTimeline.Reverse();
+			if (ACollectableItem* CastingResult = Cast<ACollectableItem>(TargetActor))
+			{
+				if (TargetActor != nullptr)
+				{
+					if (CastingResult->bTakeable)
+					{
+						CastingResult->PlayTakeSound();
+						GetWorld()->DestroyActor(TargetActor);
+						Flip();
+					}
+					else
+					{
+						CurveTimeline.Reverse();
+					}
+
+				}
+					
+			}
+			
+			
 		}
 
 	}

@@ -33,7 +33,7 @@ public:
 		USoundBase* TakeSound;
 
 	UFUNCTION(BlueprintCallable)
-		void PlayTakeSound(USoundBase* Sound);
+		void PlayTakeSound();
 
 
 protected:

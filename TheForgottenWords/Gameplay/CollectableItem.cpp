@@ -16,12 +16,12 @@ ACollectableItem::ACollectableItem()
 
 }
 
-void ACollectableItem::PlayTakeSound(USoundBase* Sound)
+void ACollectableItem::PlayTakeSound()
 {
 
-	if (Sound != nullptr)
+	if (TakeSound != nullptr)
 	{
-		UGameplayStatics::PlaySound2D(this, Sound);
+		UGameplayStatics::PlaySound2D(this, TakeSound);
 	}
 	
 

@@ -12,11 +12,11 @@
 #include "Camera/CameraComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/TimelineComponent.h"
+#include <TheForgottenWords/Gameplay/CollectableItem.h>
 
 #include "Blueprint/UserWidget.h"
 
 #include "PlayerCharacter.generated.h"
-
 
 UCLASS()
 class THEFORGOTTENWORDS_API APlayerCharacter : public ACharacter
@@ -58,6 +58,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void TurnUp(float Value);
 
+	UFUNCTION()
+		void Flip();
+
+	//Flip Flop variable manager
+	bool b = true;
+
+	bool bInteracting = false;
 
 	void DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
 
@@ -86,9 +93,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintNativeEvent)
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 		AActor* Linetrace(float TraceDistance);
 		AActor* Linetrace_Implementation(float TraceDistance);
+
+	AActor* TargetActor;
 
 	UFUNCTION()
 		void PlayInspectionAnimation(AActor* Target);
@@ -97,16 +106,12 @@ protected:
 
 	FOnTimelineFloat InterpFunction;
 
-	UPROPERTY()
-		FVector ObjectLoc;
+	FVector ObjectLoc;
+	FRotator ObjectRot;
+	FRotator NewRot;
 
-	UPROPERTY()
-		FRotator ObjectRot;
-
-	UPROPERTY()
-		FRotator NewRot;
-
-	AActor* TargetActor;
+	UFUNCTION()
+		void InspectFinished();
 
 
 

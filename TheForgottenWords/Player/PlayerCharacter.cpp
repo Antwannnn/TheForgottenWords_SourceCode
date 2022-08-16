@@ -58,23 +58,31 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	CurveTimeline.TickTimeline(DeltaTime);
 
-	AActor* AimedActor = Linetrace(125);
-
-	if (AimedActor)
+	if (!bZoom)
 	{
 
-		if (AInteractableItem* pInteractableCastingResult = Cast<AInteractableItem>(AimedActor))
-		{
-			SelectedIndex = 1;
-		}
-		else if(ACollectableItem* pCollectableCastingResult = Cast<ACollectableItem>(AimedActor))
+		TargetActor = Linetrace(125);
+		if (TargetActor)
 		{
 
-			SelectedIndex = 0;
+			if (Cast<AInteractableItem>(TargetActor))
+			{
 
+				SelectedIndex = 1;
+
+			}
+			else if (Cast<ACollectableItem>(TargetActor))
+			{
+
+				SelectedIndex = 0;
+
+			}
+			DisplayWidget(Interaction_Widget_Class, Interaction_Widget);
 		}
-		DisplayWidget(Interaction_Widget_Class, Interaction_Widget);
 	}
+
+
+	
 
 	
 
@@ -124,35 +132,30 @@ void APlayerCharacter::MoveRight(float Axis)
 void APlayerCharacter::InteractPressed()
 {
 
-	TargetActor = Linetrace(400);
-
-	if (TargetActor)
+	if (!bInteracting)
 	{
-		if (!bZoom) {
+		if (!bZoom)
+		{	
+			TargetActor = Linetrace(125);
 
-			if (Cast<ACollectableItem>(TargetActor))
+			if (Cast<ACollectableItem>(TargetActor) && CurveFloat && TargetActor)
 			{
-				
-				if (CurveFloat)
-				{
+
+					bZoom = true;
+					bInteracting = true;
+					GetCharacterMovement()->DisableMovement();
 					PlayInspectionAnimation(TargetActor);
-
-				}
-
-
+						
 			}
 
 		}
-		else 
+		else
 		{
-			bZoom = false;
 			CurveTimeline.Reverse();
-			GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
-
-
 		}
 
 	}
+	
 }
 
 void APlayerCharacter::PlayCameraShake(float Scale)
@@ -164,12 +167,13 @@ void APlayerCharacter::PlayCameraShake(float Scale)
 
 void APlayerCharacter::TimelineProgress(float Value)
 {
-
-	FadeIn = Value;
-	FVector NewLocation = FMath::Lerp(ObjectLoc, ViewLocation->GetComponentLocation(), FadeIn);
-	FRotator NewRotation = FMath::Lerp(ObjectRot, NewRot, FadeIn);
-	TargetActor->SetActorLocationAndRotation(NewLocation, NewRotation);
-	
+	if(TargetActor != nullptr)
+	{
+		FadeIn = Value;
+		FVector NewLocation = FMath::Lerp(ObjectLoc, ViewLocation->GetComponentLocation(), FadeIn);
+		FRotator NewRotation = FMath::Lerp(ObjectRot, NewRot, FadeIn);
+		TargetActor->SetActorLocationAndRotation(NewLocation, NewRotation);
+	}
 
 }
 
@@ -178,20 +182,18 @@ void APlayerCharacter::TurnLeft(float Value)
 
 	if (bZoom)
 	{
-		const FRotator YawRotation(0.0f, (Value * -1.0f), 0.0f);
-		FRotator CombinedRotators = YawRotation + TargetActor->GetActorRotation();
-		NewRot = CombinedRotators;
-		TargetActor->SetActorRotation(CombinedRotators);
+		if (TargetActor != nullptr)
+		{
+			const FRotator YawRotation(0.0f, (Value * -1.0f), 0.0f);
+			FRotator CombinedRotators = YawRotation + TargetActor->GetActorRotation();
+			NewRot = CombinedRotators;
+			TargetActor->SetActorRotation(CombinedRotators);
+		}
+
 
 	}
 	else
-	{
-
 		AddControllerYawInput(Value);
-
-	}
-		
-
 
 }
 
@@ -199,18 +201,15 @@ void APlayerCharacter::TurnUp(float Value)
 {
 	if (bZoom)
 	{
-		const FRotator YawRotation(Value, 0.0f, 0.0f);
-		FRotator CombinedRotators = YawRotation + TargetActor->GetActorRotation();
-		TargetActor->SetActorRotation(CombinedRotators);
+		if (TargetActor != nullptr)
+		{
+			const FRotator YawRotation(Value, 0.0f, 0.0f);
+			FRotator CombinedRotators = YawRotation + TargetActor->GetActorRotation();
+			TargetActor->SetActorRotation(CombinedRotators);
+		}
 	}
 	else
-	{
-
 		AddControllerPitchInput(Value);
-
-	}
-
-
 }
 
 
@@ -255,7 +254,6 @@ AActor* APlayerCharacter::Linetrace_Implementation(float TraceDistance)
 
 void APlayerCharacter::PlayInspectionAnimation(AActor* Target)
 {
-	bZoom = true;
 	InterpFunction.BindUFunction(this, FName("TimelineProgress"));
 
 	CurveTimeline.AddInterpFloat(CurveFloat, InterpFunction);
@@ -264,11 +262,40 @@ void APlayerCharacter::PlayInspectionAnimation(AActor* Target)
 	ObjectLoc = Target->GetActorLocation();
 	ObjectRot = Target->GetActorRotation();
 
+	FOnTimelineEvent FinishedEvent;
+	FinishedEvent.BindUFunction(this, FName("InspectFinished"));
+	CurveTimeline.SetTimelineFinishedFunc(FinishedEvent);
+
 	CurveTimeline.PlayFromStart();
-	GetCharacterMovement()->DisableMovement();
 }
 
 
+void APlayerCharacter::InspectFinished()
+{
+	
+	Flip();
+
+}
+
+void APlayerCharacter::Flip()
+{
+
+	if (b)
+	{
+		b = false;
+		bInteracting = false;
+	}
+	else
+	{
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+		bInteracting = false;
+		bZoom = false;
+		b = true;
+	}
+	
+
+
+}
 
 
 

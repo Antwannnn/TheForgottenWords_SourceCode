@@ -4,6 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "Blueprint/WidgetTree.h"
+#include "Components/CanvasPanel.h"
+#include "Components/CanvasPanelSlot.h"
+#include "Components/TextBlock.h"
 #include "InteractionUI.generated.h"
 
 UCLASS()
@@ -11,4 +15,18 @@ class THEFORGOTTENWORDS_API UInteractionUI : public UUserWidget
 {
 	GENERATED_BODY()
 	
+public:
+
+	UPROPERTY(BlueprintReadOnly)
+		UTextBlock* Text;
+
+	UPROPERTY(EditAnywhere)
+		FText TextContent = FText::FromString(TEXT("Default"));
+
+	TSharedRef<SWidget> RebuildWidget();
+
+
+protected:
+		
+	virtual void NativeConstruct() override;
 };

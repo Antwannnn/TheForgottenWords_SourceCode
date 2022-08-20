@@ -5,6 +5,10 @@
 #include "CoreMinimal.h"
 #include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
+#include "TimerManager.h"
+#include <TheForgottenWords/UI/InteractionUI.h>
+
+#include "Blueprint/UserWidget.h"
 
 #include "InteractableItem.generated.h"
 
@@ -27,6 +31,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void PlayAnimationTimeline();
+
+
+	UPROPERTY(EditAnywhere, Category = "UI HUD")
+		TSubclassOf<UUserWidget> InteractionWidgetClass;
+
+	UInteractionUI* InteractionWidget;
+
+	void ConstructWidget();
+
 
 protected:
 	// Called when the game starts or when spawned

@@ -5,8 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Blueprint/UserWidget.h"
 #include "DrawDebugHelpers.h"
-#include <TheForgottenWords/Gameplay/InteractableItem.h>
-#include <TheForgottenWords/Gameplay/CollectableItem.h>
+
 
 
 // Sets default values
@@ -64,20 +63,19 @@ void APlayerCharacter::Tick(float DeltaTime)
 		TargetActor = Linetrace(125);
 		if (TargetActor)
 		{
-
 			if (Cast<AInteractableItem>(TargetActor))
 			{
 
-				SelectedIndex = 1;
+				DisplayWidget(Interaction_Widget_Class, Interaction_Widget, 1);
 
 			}
 			else if (Cast<ACollectableItem>(TargetActor))
 			{
 
-				SelectedIndex = 0;
+				DisplayWidget(Interaction_Widget_Class, Interaction_Widget, 0);
 
 			}
-			DisplayWidget(Interaction_Widget_Class, Interaction_Widget);
+			
 		}
 	}
 
@@ -138,7 +136,7 @@ void APlayerCharacter::InteractPressed()
 		{	
 			TargetActor = Linetrace(125);
 
-			if (ACollectableItem* CastingResult = Cast<ACollectableItem>(TargetActor))
+			if (Cast<ACollectableItem>(TargetActor))
 			{
 				if (CurveFloat && TargetActor)
 				{
@@ -151,6 +149,19 @@ void APlayerCharacter::InteractPressed()
 				}
 					
 			}
+			else if (AInteractableItem* CastingResult = Cast<AInteractableItem>(TargetActor))
+			{
+				if (TargetActor)
+				{
+					
+					UE_LOG(LogTemp, Warning, TEXT("Good"));
+					CastingResult->ConstructWidget();
+
+				}
+				
+
+			}
+
 
 		}
 		else
@@ -235,6 +246,21 @@ void APlayerCharacter::TurnUp(float Value)
 		AddControllerPitchInput(Value);
 }
 
+
+void APlayerCharacter::DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget, int index)
+{
+	if (IsValid(WidgetClass))
+	{
+		Widget = CreateWidget(GetWorld(), WidgetClass);
+
+		if (Widget != nullptr)
+		{
+			Widget->AddToViewport();
+		}
+
+	}
+	SelectedIndex = index;
+}
 
 void APlayerCharacter::DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget)
 {

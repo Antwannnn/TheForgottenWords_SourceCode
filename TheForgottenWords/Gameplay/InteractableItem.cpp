@@ -68,3 +68,24 @@ void AInteractableItem::PlayAnimationTimeline()
 	}
 }
 
+void AInteractableItem::ConstructWidget()
+{
+
+	if (IsValid(InteractionWidgetClass))
+	{
+
+		InteractionWidget = Cast<UInteractionUI>(CreateWidget(GetWorld(), InteractionWidgetClass));
+		InteractionWidget->TextContent = Text;
+
+		if (InteractionWidget != nullptr)
+		{
+			InteractionWidget->AddToViewport();
+		}
+
+		
+	}
+
+}
+
+
+

@@ -8,11 +8,13 @@
 #include "GameFramework/Controller.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include <TheForgottenWords/Gameplay/InteractableItem.h>
+#include <TheForgottenWords/Gameplay/CollectableItem.h>
+#include <TheForgottenWords/UI/InteractionUI.h>
 #include "Components/InputComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/TimelineComponent.h"
-#include <TheForgottenWords/Gameplay/CollectableItem.h>
 
 #include "Blueprint/UserWidget.h"
 
@@ -35,6 +37,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "UI HUD")
 		TSubclassOf<UUserWidget> Interaction_Widget_Class;
+
 	UUserWidget* Interaction_Widget;
 
 	UFUNCTION()
@@ -65,6 +68,8 @@ public:
 	bool b = true;
 
 	bool bInteracting = false;
+
+	void DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget, int index);
 
 	void DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
 
@@ -102,6 +107,8 @@ protected:
 	UFUNCTION()
 		void PlayInspectionAnimation(AActor* Target);
 
+	
+
 	FTimeline CurveTimeline;
 
 	FOnTimelineFloat InterpFunction;
@@ -119,7 +126,7 @@ protected:
 private:
 
 	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
-		int SelectedIndex = 1;
+		int SelectedIndex;
 
 public:	
 	// Called every frame

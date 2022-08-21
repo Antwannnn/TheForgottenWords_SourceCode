@@ -35,10 +35,17 @@ public:
 	UPROPERTY(EditAnywhere, meta = (EditCondition = "ApplyTransform"), Category = "Timeline")
 		FTransform ObjectTransform;
 
+	FTimerHandle TH_WidgetDelayManager;
+
 	UPROPERTY(EditAnywhere, Category = "UI HUD")
 		TSubclassOf<UUserWidget> InteractionWidgetClass;
 
 	UInteractionUI* InteractionWidget;
+
+	bool bDelay = false;
+
+	UFUNCTION()
+		void TimerMethod();
 
 	void ConstructWidget();
 

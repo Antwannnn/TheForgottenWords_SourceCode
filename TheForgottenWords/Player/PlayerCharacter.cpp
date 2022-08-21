@@ -153,8 +153,11 @@ void APlayerCharacter::InteractPressed()
 			{
 				if (TargetActor)
 				{
-					CastingResult->ConstructWidget();
-					CastingResult->PlayTransformTimeline();
+					if (!CastingResult->bDelay)
+					{
+						CastingResult->ConstructWidget();
+					}
+
 				}
 				
 

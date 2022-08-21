@@ -72,17 +72,34 @@ void AInteractableItem::ConstructWidget()
 
 	if (IsValid(InteractionWidgetClass))
 	{
-
 		InteractionWidget = Cast<UInteractionUI>(CreateWidget(GetWorld(), InteractionWidgetClass));
-		InteractionWidget->TextContent = Text;
-
-		if (InteractionWidget != nullptr)
+		if (!Text.EqualTo(FText::FromString("")))
 		{
-			InteractionWidget->AddToViewport();	
-		}
+			InteractionWidget->TextContent = Text;
 
+			if (InteractionWidget != nullptr)
+			{
+				bDelay = true;
+				InteractionWidget->AddToViewport();
+				GetWorld()->GetTimerManager().SetTimer(TH_WidgetDelayManager, this, &AInteractableItem::TimerMethod, 3, false);
+
+			}
+		}
+			
 		
 	}
+
+}
+void AInteractableItem::TimerMethod()
+{
+	if (InteractionWidget != nullptr)
+	{
+		InteractionWidget->RemoveFromParent();
+		bDelay = false;
+	}
+
+
+		
 
 }
 

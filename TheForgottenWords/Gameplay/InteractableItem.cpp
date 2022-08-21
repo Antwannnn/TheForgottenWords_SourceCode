@@ -40,7 +40,7 @@ void AInteractableItem::TimelineProgress(float Value)
 
 }
 
-void AInteractableItem::PlayAnimationTimeline()
+void AInteractableItem::PlayTransformTimeline()
 {
 	if (CurveFloat)
 	{
@@ -48,7 +48,6 @@ void AInteractableItem::PlayAnimationTimeline()
 		TimelineProgress.BindUFunction(this, FName("TimelineProgress"));
 
 		CurveTimeline.AddInterpFloat(CurveFloat, TimelineProgress);
-		CurveTimeline.SetLooping(true);
 		CurveTimeline.SetPlayRate(Rate);
 
 		StartLoc = EndLoc = GetActorLocation();
@@ -79,7 +78,7 @@ void AInteractableItem::ConstructWidget()
 
 		if (InteractionWidget != nullptr)
 		{
-			InteractionWidget->AddToViewport();
+			InteractionWidget->AddToViewport();	
 		}
 
 		

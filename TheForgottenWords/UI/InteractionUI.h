@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "TimerManager.h"
 #include "InteractionUI.generated.h"
 
 UCLASS()
@@ -16,7 +17,12 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		FText TextContent = FText::FromString(TEXT("Default"));
 
+	UFUNCTION()
+		void Delay();
+
 protected:
+
+	FTimerHandle TH_WidgetDelayManager;
 		
 	virtual void NativeConstruct() override;
 };

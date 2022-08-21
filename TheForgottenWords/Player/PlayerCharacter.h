@@ -67,6 +67,8 @@ public:
 	//Flip Flop variable manager
 	bool b = true;
 
+	bool bDisplayed = false;
+
 	bool bInteracting = false;
 
 	void DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget, int index);
@@ -87,8 +89,6 @@ public:
 
 	UPROPERTY()
 		float FadeIn;
-
-	bool bDisplayed = false;
 
 	UFUNCTION()
 		void OnBeginOverlap(class UPrimitiveComponent* HitComp, class AActor* OtherActor,

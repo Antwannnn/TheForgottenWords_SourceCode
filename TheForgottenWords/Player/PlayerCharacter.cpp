@@ -153,10 +153,8 @@ void APlayerCharacter::InteractPressed()
 			{
 				if (TargetActor)
 				{
-					
-					UE_LOG(LogTemp, Warning, TEXT("Good"));
 					CastingResult->ConstructWidget();
-
+					CastingResult->PlayTransformTimeline();
 				}
 				
 
@@ -341,9 +339,6 @@ void APlayerCharacter::Flip()
 		bZoom = false;
 		b = true;
 	}
-	
-
-
 }
 
 

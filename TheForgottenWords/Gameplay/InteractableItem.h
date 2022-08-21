@@ -30,8 +30,10 @@ public:
 		void TimelineProgress(float Value);
 
 	UFUNCTION(BlueprintCallable)
-		void PlayAnimationTimeline();
+		void PlayTransformTimeline();
 
+	UPROPERTY(EditAnywhere, meta = (EditCondition = "ApplyTransform"), Category = "Timeline")
+		FTransform ObjectTransform;
 
 	UPROPERTY(EditAnywhere, Category = "UI HUD")
 		TSubclassOf<UUserWidget> InteractionWidgetClass;
@@ -50,9 +52,6 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Timeline")
 		bool ApplyTransform;
-
-	UPROPERTY(EditAnywhere, meta = (EditCondition = "ApplyTransform"), Category = "Timeline")
-		FTransform ObjectTransform;
 
 	FTimeline CurveTimeline;
 

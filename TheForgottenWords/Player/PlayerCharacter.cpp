@@ -149,13 +149,14 @@ void APlayerCharacter::InteractPressed()
 				}
 					
 			}
-			else if (AInteractableItem* CastingResult = Cast<AInteractableItem>(TargetActor))
+			else if (AInteractableItem* InteractableItemCheck = Cast<AInteractableItem>(TargetActor))
 			{
 				if (TargetActor)
 				{
-					if (!CastingResult->bDelay)
+					if (!InteractableItemCheck->bDelay)
 					{
-						CastingResult->ConstructWidget();
+						InteractableItemCheck->ConstructWidget();
+						InteractableItemCheck->PlayTransformTimeline();
 					}
 
 				}
@@ -167,13 +168,13 @@ void APlayerCharacter::InteractPressed()
 		}
 		else
 		{
-			if (ACollectableItem* CastingResult = Cast<ACollectableItem>(TargetActor))
+			if (ACollectableItem* InteractableItemCheck = Cast<ACollectableItem>(TargetActor))
 			{
 				if (TargetActor != nullptr)
 				{
-					if (CastingResult->bTakeable)
+					if (InteractableItemCheck->bTakeable)
 					{
-						CastingResult->PlayTakeSound();
+						InteractableItemCheck->PlayTakeSound();
 						GetWorld()->DestroyActor(TargetActor);
 						Flip();
 					}

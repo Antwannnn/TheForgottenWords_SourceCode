@@ -130,7 +130,6 @@ void APlayerCharacter::MoveRight(float Axis)
 
 void APlayerCharacter::InteractPressed()
 {
-
 	if (!bInteracting)
 	{
 		if (!bZoom)
@@ -141,14 +140,11 @@ void APlayerCharacter::InteractPressed()
 			{
 				if (CurveFloat && TargetActor)
 				{
-
 					bZoom = true;
 					bInteracting = true;
 					GetCharacterMovement()->DisableMovement();
 					PlayInspectionAnimation(TargetActor);
-
 				}
-					
 			}
 			else if (AInteractableItem* InteractableItemCheck = Cast<AInteractableItem>(TargetActor))
 			{
@@ -159,13 +155,8 @@ void APlayerCharacter::InteractPressed()
 						InteractableItemCheck->ConstructWidget();
 						InteractableItemCheck->PlayTransformTimeline();
 					}
-
 				}
-				
-
 			}
-
-
 		}
 		else
 		{
@@ -183,16 +174,10 @@ void APlayerCharacter::InteractPressed()
 					{
 						CurveTimeline.Reverse();
 					}
-
 				}
-					
 			}
-			
-			
 		}
-
 	}
-	
 }
 
 void APlayerCharacter::PlayCameraShake(float Scale)
@@ -226,12 +211,9 @@ void APlayerCharacter::TurnLeft(float Value)
 			NewRot = CombinedRotators;
 			TargetActor->SetActorRotation(CombinedRotators);
 		}
-
-
 	}
 	else
 		AddControllerYawInput(Value);
-
 }
 
 void APlayerCharacter::TurnUp(float Value)

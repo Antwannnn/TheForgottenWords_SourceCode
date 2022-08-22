@@ -39,6 +39,7 @@ void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* Othe
 
 	
 
+
 }
 
 // Called when the game starts or when spawned
@@ -206,8 +207,8 @@ void APlayerCharacter::TimelineProgress(float Value)
 	if(TargetActor != nullptr)
 	{
 		FadeIn = Value;
-		FVector NewLocation = FMath::Lerp(ObjectLoc, ViewLocation->GetComponentLocation(), FadeIn);
-		FRotator NewRotation = FMath::Lerp(ObjectRot, NewRot, FadeIn);
+		const FVector NewLocation = FMath::Lerp(ObjectLoc, ViewLocation->GetComponentLocation(), FadeIn);
+		const FRotator NewRotation = FMath::Lerp(ObjectRot, NewRot, FadeIn);
 		TargetActor->SetActorLocationAndRotation(NewLocation, NewRotation);
 	}
 
@@ -221,7 +222,7 @@ void APlayerCharacter::TurnLeft(float Value)
 		if (TargetActor != nullptr)
 		{
 			const FRotator YawRotation(0.0f, (Value * -1.0f), 0.0f);
-			FRotator CombinedRotators = YawRotation + TargetActor->GetActorRotation();
+			const FRotator CombinedRotators = YawRotation + TargetActor->GetActorRotation();
 			NewRot = CombinedRotators;
 			TargetActor->SetActorRotation(CombinedRotators);
 		}
@@ -240,7 +241,7 @@ void APlayerCharacter::TurnUp(float Value)
 		if (TargetActor != nullptr)
 		{
 			const FRotator YawRotation(Value, 0.0f, 0.0f);
-			FRotator CombinedRotators = YawRotation + TargetActor->GetActorRotation();
+			const FRotator CombinedRotators = YawRotation + TargetActor->GetActorRotation();
 			TargetActor->SetActorRotation(CombinedRotators);
 		}
 	}

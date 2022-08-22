@@ -10,6 +10,14 @@
 
 #include "BoxTriggerVolume.generated.h"
 
+UENUM(BlueprintType)
+enum EGameplayEventSelector
+{
+
+	GES_LoadSubLevel UMETA(DisplayName = "LoadSubLevel"),
+	GES_MoveObject UMETA(DisplayName = "MoveObject")
+
+};
 UCLASS()
 class THEFORGOTTENWORDS_API ABoxTriggerVolume : public AActor, public IGameplayEvent 
 {
@@ -19,10 +27,14 @@ public:
 	// Sets default values for this actor's properties
 	ABoxTriggerVolume();
 
+	UPROPERTY(EditAnywhere)
+		TEnumAsByte<EGameplayEventSelector> Selector;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+
 
 	UFUNCTION()
 		void OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent*

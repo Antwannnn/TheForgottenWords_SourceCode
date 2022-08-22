@@ -22,7 +22,17 @@ void ABoxTriggerVolume::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* Oth
 
 	if(Cast<APlayerCharacter>(OtherActor))
 	{
-		IGameplayEvent::LoadSubLevel(this, SubLevelName);
+		switch(Selector)
+		{
+		case 0:
+			IGameplayEvent::LoadSubLevel(this, SubLevelName);
+
+		case 1:
+			UE_LOG(LogTemp, Warning, TEXT("Yes"));
+		}
+
+
+
 	}
 
 

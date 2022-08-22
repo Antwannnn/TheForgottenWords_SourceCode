@@ -16,7 +16,6 @@ APlayerCharacter::APlayerCharacter()
 
 	GetCharacterMovement()->MaxWalkSpeed = (250.0f);
 
-
 	//FirstPerson CameraSetup
 	CameraView = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera View"));
 	CameraView->SetupAttachment(RootComponent);
@@ -30,15 +29,10 @@ APlayerCharacter::APlayerCharacter()
 	ViewLocation->SetRelativeLocation(FVector(30.0f, 0.0f, 1.0f));
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
-
-
 }
 
 void APlayerCharacter::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-
-	
-
 
 }
 
@@ -48,7 +42,6 @@ void APlayerCharacter::BeginPlay()
 	Super::BeginPlay();
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &APlayerCharacter::OnBeginOverlap);
-	
 }
 
 // Called every frame
@@ -60,31 +53,19 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	if (!bZoom)
 	{
-
 		TargetActor = Linetrace(125);
 		if (TargetActor)
 		{
 			if (Cast<AInteractableItem>(TargetActor))
 			{
-
 				DisplayWidget(Interaction_Widget_Class, Interaction_Widget, 1);
-
 			}
 			else if (Cast<ACollectableItem>(TargetActor))
 			{
-
 				DisplayWidget(Interaction_Widget_Class, Interaction_Widget, 0);
-
 			}
-			
 		}
 	}
-
-
-	
-
-	
-
 }
 
 // Called to bind functionality to input
@@ -101,8 +82,6 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	//Move Forward and move right PlayerInputComponent
 	PlayerInputComponent->BindAxis("MoveForward", this, &APlayerCharacter::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &APlayerCharacter::MoveRight);
-
-
 }
 
 
@@ -114,7 +93,6 @@ void APlayerCharacter::MoveForward(float axis)
 	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	AddMovementInput(Direction, axis);
 	APlayerCharacter::PlayCameraShake(axis);
-
 }
 
 void APlayerCharacter::MoveRight(float Axis)
@@ -125,7 +103,6 @@ void APlayerCharacter::MoveRight(float Axis)
 	const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
 	AddMovementInput(Direction, Axis);
 	APlayerCharacter::PlayCameraShake(Axis);
-
 }
 
 void APlayerCharacter::InteractPressed()
@@ -182,9 +159,7 @@ void APlayerCharacter::InteractPressed()
 
 void APlayerCharacter::PlayCameraShake(float Scale)
 {
-
 	GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraShake(CameraShake, Scale);
-
 }
 
 void APlayerCharacter::TimelineProgress(float Value)
@@ -196,12 +171,10 @@ void APlayerCharacter::TimelineProgress(float Value)
 		const FRotator NewRotation = FMath::Lerp(ObjectRot, NewRot, FadeIn);
 		TargetActor->SetActorLocationAndRotation(NewLocation, NewRotation);
 	}
-
 }
 
 void APlayerCharacter::TurnLeft(float Value)
 {
-
 	if (bZoom)
 	{
 		if (TargetActor != nullptr)
@@ -242,7 +215,6 @@ void APlayerCharacter::DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUser
 		{
 			Widget->AddToViewport();
 		}
-
 	}
 	SelectedIndex = index;
 }
@@ -257,13 +229,11 @@ void APlayerCharacter::DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUser
 		{
 			Widget->AddToViewport();
 		}
-
 	}
 }
 
 AActor* APlayerCharacter::Linetrace_Implementation(float TraceDistance)
 {
-
 	FVector Location;
 	FRotator Rotation;
 	FHitResult HitResult;
@@ -306,14 +276,11 @@ void APlayerCharacter::PlayInspectionAnimation(AActor* Target)
 
 void APlayerCharacter::InspectFinished()
 {
-	
 	Flip();
-
 }
 
 void APlayerCharacter::Flip()
 {
-
 	if (b)
 	{
 		b = false;

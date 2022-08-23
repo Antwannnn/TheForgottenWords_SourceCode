@@ -4,20 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Misc/OutputDeviceNull.h"
 #include <TheForgottenWords/Player/PlayerCharacter.h>
 #include <TheForgottenWords/Interfaces/GameplayEvent.h>
 #include "Components/BoxComponent.h"
 
 #include "BoxTriggerVolume.generated.h"
 
-UENUM(BlueprintType)
-enum EGameplayEventSelector
-{
 
-	GES_LoadSubLevel UMETA(DisplayName = "LoadSubLevel"),
-	GES_MoveObject UMETA(DisplayName = "MoveObject")
-
-};
 UCLASS()
 class THEFORGOTTENWORDS_API ABoxTriggerVolume : public AActor, public IGameplayEvent 
 {
@@ -27,28 +21,34 @@ public:
 	// Sets default values for this actor's properties
 	ABoxTriggerVolume();
 
-	UPROPERTY(EditAnywhere)
-		TEnumAsByte<EGameplayEventSelector> Selector;
+	UPROPERTY(EditAnywhere, Category = Functions)
+		TEnumAsByte<EGameplayEvent> Selector;
+
+	//Level Loading an Unloading
+	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition="Selector == EGameplayEvent::Ges_LoadSubLevel || Selector == EGameplayEvent::Ges_UnloadSubLevel", EditConditionHides))
+		FName SubLevelName;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	void CallFunctionByEnumItem();
 
-
-	UFUNCTION()
+	UFUNCTION(CallInEditor)
 		void OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent*
 			OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Collision")
-		UBoxComponent* BoxCollision;
+		UBoxComponent* BoxCollision;;
+
+
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
 
 private:
-	UPROPERTY(EditAnywhere, Category = "SubLevel")
-		FName SubLevelName;
+
 
 };

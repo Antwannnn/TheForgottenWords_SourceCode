@@ -5,6 +5,8 @@
 #include "Kismet/GameplayStatics.h"
 #include <Engine/LevelStreaming.h>
 
+#define stringify( name ) #name
+
 // Sets default values
 ABoxTriggerVolume::ABoxTriggerVolume()
 {
@@ -22,17 +24,8 @@ void ABoxTriggerVolume::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* Oth
 
 	if(Cast<APlayerCharacter>(OtherActor))
 	{
-		switch(Selector)
-		{
-		case 0:
-			IGameplayEvent::LoadSubLevel(this, SubLevelName);
-
-		case 1:
-			UE_LOG(LogTemp, Warning, TEXT("Yes"));
-		}
-
-
-
+		CallFunctionByEnumItem();
+		K2_DestroyActor();
 	}
 
 
@@ -49,10 +42,21 @@ void ABoxTriggerVolume::BeginPlay()
 	
 }
 
+void ABoxTriggerVolume::CallFunctionByEnumItem()
+{
+	switch (Selector)
+	{
+	case Ges_LoadSubLevel:  return IGameplayEvent::LoadSubLevel(this, SubLevelName);
+	case Ges_UnloadSubLevel:  return IGameplayEvent::UnloadSubLevel(this, SubLevelName);
+	}
+}
+
 // Called every frame
 void ABoxTriggerVolume::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
+
+
 

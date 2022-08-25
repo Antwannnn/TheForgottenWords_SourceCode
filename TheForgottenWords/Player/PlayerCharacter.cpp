@@ -53,7 +53,8 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	if (!bZoom)
 	{
-		TargetActor = Linetrace(125);
+		TargetActor = GameplayEvent->LinetraceByChannel(125, GetWorld(), GetController());
+
 		if (TargetActor)
 		{
 			if (Cast<AInteractableItem>(TargetActor))
@@ -111,7 +112,7 @@ void APlayerCharacter::InteractPressed()
 	{
 		if (!bZoom)
 		{	
-			TargetActor = Linetrace(125);
+			TargetActor = GameplayEvent->LinetraceByChannel(125, GetWorld(), GetController());
 
 			if (Cast<ACollectableItem>(TargetActor))
 			{
@@ -232,29 +233,6 @@ void APlayerCharacter::DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUser
 	}
 }
 
-AActor* APlayerCharacter::Linetrace_Implementation(float TraceDistance)
-{
-	FVector Location;
-	FRotator Rotation;
-	FHitResult HitResult;
-
-	GetController()->GetPlayerViewPoint(Location, Rotation);
-
-	FVector StartPoint = Location;
-	FVector EndPoint = StartPoint + (Rotation.Vector() * TraceDistance);
-
-	FCollisionQueryParams TraceParams;
-	TraceParams.AddIgnoredActor(this);
-
-	bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, EndPoint, ECC_Visibility, TraceParams);
-
-	if (bHit) 
-	{
-		return HitResult.GetActor();
-	}
-	return nullptr;
-
-}
 
 void APlayerCharacter::PlayInspectionAnimation(AActor* Target)
 {

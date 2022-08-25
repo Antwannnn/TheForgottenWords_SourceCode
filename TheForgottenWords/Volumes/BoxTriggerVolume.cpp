@@ -25,6 +25,7 @@ void ABoxTriggerVolume::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* Oth
 	if(Cast<APlayerCharacter>(OtherActor))
 	{
 		CallFunctionByEnumItem();
+		if(!Repeat)
 		K2_DestroyActor();
 	}
 
@@ -46,8 +47,8 @@ void ABoxTriggerVolume::CallFunctionByEnumItem()
 {
 	switch (Selector)
 	{
-	case Ges_LoadSubLevel:  return IGameplayEvent::LoadSubLevel(this, SubLevelName);
-	case Ges_UnloadSubLevel:  return IGameplayEvent::UnloadSubLevel(this, SubLevelName);
+	case GE_LoadSubLevel:  return IGameplayEvent::LoadSubLevel(this, SubLevelName);
+	case GE_UnloadSubLevel:  return IGameplayEvent::UnloadSubLevel(this, SubLevelName);
 	}
 }
 

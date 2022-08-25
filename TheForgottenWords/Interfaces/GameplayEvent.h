@@ -3,17 +3,16 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TimelineComponent.h"
 #include "UObject/Interface.h"
 #include "GameplayEvent.generated.h"
 
 UENUM()
 enum EGameplayEvent
 {
-	Ges_None UMETA(DisplayName = "None"),
-	Ges_LoadSubLevel UMETA(DisplayName = "LoadSubLevel"),
-	Ges_UnloadSubLevel UMETA(DisplayName = "UnloadSubLevel"),
-	Ges_PlaySound2D UMETA(DisplayName = "PlaySound2D"),
-	Ges_SpawnActor UMETA(DisplayName = "SpawnActor")
+	GE_None UMETA(DisplayName = "None"),
+	GE_LoadSubLevel UMETA(DisplayName = "LoadSubLevel"),
+	GE_UnloadSubLevel UMETA(DisplayName = "UnloadSubLevel"),
 
 };
 
@@ -34,18 +33,24 @@ class THEFORGOTTENWORDS_API IGameplayEvent
 public:
 
 	//Every Method needed to perform in-game actions.
-	virtual void LoadSubLevel(const UObject* WorldContextObject, FName SubLevelName);
+	void LoadSubLevel(const UObject* WorldContextObject, FString SubLevelName);
 
-	virtual void UnloadSubLevel(const UObject* WorldContextObject, FName SubLevelName);
+	void UnloadSubLevel(const UObject* WorldContextObject, FString SubLevelName);
+
+	//LinetraceByChannel method overloading
+	AActor* LinetraceByChannel(float InTraceDistance, UWorld* World, AController* Controller);
+	AActor* LinetraceByChannel(float InTraceDistance, UWorld* World, FVector Location, FRotator Rotation);
+
+
 
 
 protected:
 
-	bool IsLevelLoaded(FName SubLevelName);
-
-	FName tempLevelName;
-
+	//Level loading
+	//bool IsLevelLoaded(FString SubLevelName);
+	FString tempLevelName;
 	FLatentActionInfo LatentInfo;
+
 
 };
 

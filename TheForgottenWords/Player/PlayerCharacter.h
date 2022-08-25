@@ -11,6 +11,7 @@
 #include <TheForgottenWords/Gameplay/InteractableItem.h>
 #include <TheForgottenWords/Gameplay/CollectableItem.h>
 #include "Camera/CameraComponent.h"
+#include <TheForgottenWords/Interfaces/GameplayEvent.h>
 #include "Components/SphereComponent.h"
 #include "Components/TimelineComponent.h"
 
@@ -37,6 +38,8 @@ public:
 		TSubclassOf<UUserWidget> Interaction_Widget_Class;
 
 	UUserWidget* Interaction_Widget;
+
+	IGameplayEvent* GameplayEvent;
 
 	UFUNCTION()
 		void MoveForward(float axis);
@@ -95,10 +98,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-		AActor* Linetrace(float TraceDistance);
-		AActor* Linetrace_Implementation(float TraceDistance);
 
 	AActor* TargetActor;
 

@@ -8,7 +8,7 @@
 // Sets default values
 AInteractableItem::AInteractableItem()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
@@ -19,7 +19,7 @@ AInteractableItem::AInteractableItem()
 void AInteractableItem::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -64,7 +64,22 @@ void AInteractableItem::PlayTransformTimeline()
 		EndRot.Yaw += ToRotator.Yaw;
 		EndRot.Roll += ToRotator.Roll;
 
-		CurveTimeline.PlayFromStart();
+		if (DoOnce)
+		{
+			if(!bDoOnce)
+			{
+				CurveTimeline.PlayFromStart();
+				bDoOnce = true;
+			}
+			
+		}
+		else
+		{
+			CurveTimeline.PlayFromStart();
+		}
+
+
+
 	}
 }
 
@@ -86,8 +101,8 @@ void AInteractableItem::ConstructWidget()
 
 			}
 		}
-			
-		
+
+
 	}
 
 }
@@ -100,9 +115,6 @@ void AInteractableItem::TimerMethod()
 	}
 
 
-		
+
 
 }
-
-
-

@@ -22,11 +22,14 @@ public:
 	ABoxTriggerVolume();
 
 	UPROPERTY(EditAnywhere, Category = Functions)
+		bool Repeat;
+
+	UPROPERTY(EditAnywhere, Category = Functions)
 		TEnumAsByte<EGameplayEvent> Selector;
 
 	//Level Loading an Unloading
-	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition="Selector == EGameplayEvent::Ges_LoadSubLevel || Selector == EGameplayEvent::Ges_UnloadSubLevel", EditConditionHides))
-		FName SubLevelName;
+	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition="Selector == EGameplayEvent::GE_LoadSubLevel || Selector == EGameplayEvent::GE_UnloadSubLevel", EditConditionHides))
+		FString SubLevelName;
 
 protected:
 	// Called when the game starts or when spawned
@@ -39,7 +42,7 @@ protected:
 			OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Collision")
-		UBoxComponent* BoxCollision;;
+		UBoxComponent* BoxCollision;
 
 
 

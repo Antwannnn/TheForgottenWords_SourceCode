@@ -18,11 +18,11 @@ UCLASS()
 class THEFORGOTTENWORDS_API AInteractableItem : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AInteractableItem();
-	
+
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Rendering)
 		UStaticMeshComponent* Mesh;
 
@@ -68,19 +68,19 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Timeline", meta = (EditCondition = "ApplyTransform"))
 		float Rate;
 
-	UPROPERTY()
-		FVector StartLoc;
+	UPROPERTY(EditAnywhere, Category = "Timeline", meta = (EditCondition = "ApplyTransform"))
+		bool DoOnce;
+	bool bDoOnce;
 
-	UPROPERTY()
-		FVector EndLoc;
+	FVector StartLoc;
 
-	UPROPERTY()
-		FRotator StartRot;
+	FVector EndLoc;
 
-	UPROPERTY()
-		FRotator EndRot;
+	FRotator StartRot;
 
-public:	
+	FRotator EndRot;
+
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

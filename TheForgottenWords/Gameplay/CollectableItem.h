@@ -19,6 +19,14 @@ public:
 	// Sets default values for this actor's properties
 	ACollectableItem();
 
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Rendering)
+		UStaticMeshComponent* Mesh;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		USceneComponent* DefaultSceneRoot;
+
+
 	//All the uproperty that I will be using for the collectible item.
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 		FText Title;
@@ -29,22 +37,49 @@ public:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 		bool bTakeable = false;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+
+	UPROPERTY(EditAnywhere, Category = "Inspection")
+		UCurveFloat* CurveFloat;
+
+	UPROPERTY(EditAnywhere, Category = "Inspection")
+		float PlayRate = 1.0f;
+
+	UPROPERTY(EditAnywhere, meta = (EditCondition = "bTakeable"))
 		USoundBase* TakeSound;
 
 	UFUNCTION(BlueprintCallable)
 		void PlayTakeSound();
+
+	UFUNCTION()
+		void TimelineProgress(float Value);
+
+	UFUNCTION()
+		void PlayInspectionAnimation(FVector Location);
+
+	FVector ViewLocation;
+
+	FOnTimelineEvent FinishedEvent;
+
+	UFUNCTION()
+		void TurnUp(float Value);
+
+	UFUNCTION()
+		void TurnLeft(float Value);
+
+	FTimeline CurveTimeline;
 
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Rendering)
-		UStaticMeshComponent* Mesh;
+	float FadeIn;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		USceneComponent* DefaultSceneRoot;
+	FOnTimelineFloat InterpFunction;
+	FVector ObjectLoc;
+	FRotator ObjectRot;
+
+	FRotator NewRot;
 
 public:	
 	// Called every frame

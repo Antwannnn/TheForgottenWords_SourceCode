@@ -49,8 +49,6 @@ void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CurveTimeline.TickTimeline(DeltaTime);
-
 	if (!bZoom)
 	{
 		TargetActor = GameplayEvent->LinetraceByChannel(125, GetWorld(), GetController());
@@ -59,11 +57,13 @@ void APlayerCharacter::Tick(float DeltaTime)
 		{
 			if (Cast<AInteractableItem>(TargetActor))
 			{
-				DisplayWidget(Interaction_Widget_Class, Interaction_Widget, 1);
+				SelectedIndex = 1;
+				GameplayEvent->ConstructWidget(Interaction_Widget_Class, Interaction_Widget, GetWorld());
 			}
 			else if (Cast<ACollectableItem>(TargetActor))
 			{
-				DisplayWidget(Interaction_Widget_Class, Interaction_Widget, 0);
+				SelectedIndex = 0;
+				GameplayEvent->ConstructWidget(Interaction_Widget_Class, Interaction_Widget, GetWorld());
 			}
 		}
 	}
@@ -74,8 +74,8 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
-	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::TurnUp);
-	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::TurnLeft);
+	PlayerInputComponent->BindAxis("LookUp", this, &APlayerCharacter::LookUp);
+	PlayerInputComponent->BindAxis("Turn", this, &APlayerCharacter::LookRight);
 
 	//Interact PlayerInputComponent
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &APlayerCharacter::InteractPressed);
@@ -114,44 +114,38 @@ void APlayerCharacter::InteractPressed()
 		{	
 			TargetActor = GameplayEvent->LinetraceByChannel(125, GetWorld(), GetController());
 
-			if (Cast<ACollectableItem>(TargetActor))
+			if (ACollectableItem* CollectableItemCheck = Cast<ACollectableItem>(TargetActor))
 			{
-				if (CurveFloat && TargetActor)
-				{
-					bZoom = true;
-					bInteracting = true;
-					GetCharacterMovement()->DisableMovement();
-					PlayInspectionAnimation(TargetActor);
-				}
+				bZoom = true;
+				bInteracting = true;
+				GetCharacterMovement()->DisableMovement();
+				CollectableItemCheck->FinishedEvent.BindUFunction(this, "Flip");
+				CollectableItemCheck->PlayInspectionAnimation(ViewLocation->GetComponentLocation());
+
 			}
 			else if (AInteractableItem* InteractableItemCheck = Cast<AInteractableItem>(TargetActor))
 			{
-				if (TargetActor)
+				if (!InteractableItemCheck->bDelay)
 				{
-					if (!InteractableItemCheck->bDelay)
-					{
-						InteractableItemCheck->ConstructWidget();
+						InteractableItemCheck->DisplayTextWidget();
 						InteractableItemCheck->PlayTransformTimeline();
-					}
 				}
+				
 			}
 		}
 		else
 		{
-			if (ACollectableItem* InteractableItemCheck = Cast<ACollectableItem>(TargetActor))
+			if (ACollectableItem* CollectableItemCheck = Cast<ACollectableItem>(TargetActor))
 			{
-				if (TargetActor != nullptr)
+				if (CollectableItemCheck->bTakeable)
 				{
-					if (InteractableItemCheck->bTakeable)
-					{
-						InteractableItemCheck->PlayTakeSound();
-						GetWorld()->DestroyActor(TargetActor);
-						Flip();
-					}
-					else
-					{
-						CurveTimeline.Reverse();
-					}
+					CollectableItemCheck->PlayTakeSound();
+					GetWorld()->DestroyActor(TargetActor);
+					Flip();
+				}
+				else
+				{
+					CollectableItemCheck->CurveTimeline.Reverse();
 				}
 			}
 		}
@@ -163,98 +157,37 @@ void APlayerCharacter::PlayCameraShake(float Scale)
 	GetWorld()->GetFirstPlayerController()->PlayerCameraManager->StartCameraShake(CameraShake, Scale);
 }
 
-void APlayerCharacter::TimelineProgress(float Value)
-{
-	if(TargetActor != nullptr)
-	{
-		FadeIn = Value;
-		const FVector NewLocation = FMath::Lerp(ObjectLoc, ViewLocation->GetComponentLocation(), FadeIn);
-		const FRotator NewRotation = FMath::Lerp(ObjectRot, NewRot, FadeIn);
-		TargetActor->SetActorLocationAndRotation(NewLocation, NewRotation);
-	}
-}
-
-void APlayerCharacter::TurnLeft(float Value)
+void APlayerCharacter::LookRight(float Value)
 {
 	if (bZoom)
 	{
-		if (TargetActor != nullptr)
+		if (ACollectableItem* CollectableItemCheck = Cast<ACollectableItem>(TargetActor))
 		{
-			const FRotator YawRotation(0.0f, (Value * -1.0f), 0.0f);
-			const FRotator CombinedRotators = YawRotation + TargetActor->GetActorRotation();
-			NewRot = CombinedRotators;
-			TargetActor->SetActorRotation(CombinedRotators);
+			CollectableItemCheck->TurnLeft(Value);
 		}
 	}
-	else
+	else 
+	{
 		AddControllerYawInput(Value);
+	}
+
 }
 
-void APlayerCharacter::TurnUp(float Value)
+void APlayerCharacter::LookUp(float Value)
 {
 	if (bZoom)
 	{
-		if (TargetActor != nullptr)
+		if (ACollectableItem* CollectableItemCheck = Cast<ACollectableItem>(TargetActor))
 		{
-			const FRotator YawRotation(Value, 0.0f, 0.0f);
-			const FRotator CombinedRotators = YawRotation + TargetActor->GetActorRotation();
-			TargetActor->SetActorRotation(CombinedRotators);
+			CollectableItemCheck->TurnUp(Value);
 		}
 	}
-	else
+	else 
+	{
 		AddControllerPitchInput(Value);
-}
-
-
-void APlayerCharacter::DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget, int index)
-{
-	if (IsValid(WidgetClass))
-	{
-		Widget = CreateWidget(GetWorld(), WidgetClass);
-
-		if (Widget != nullptr)
-		{
-			Widget->AddToViewport();
-		}
 	}
-	SelectedIndex = index;
-}
-
-void APlayerCharacter::DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget)
-{
-	if (IsValid(WidgetClass))
-	{
-		Widget = CreateWidget(GetWorld(), WidgetClass);
-
-		if (Widget != nullptr)
-		{
-			Widget->AddToViewport();
-		}
-	}
-}
 
 
-void APlayerCharacter::PlayInspectionAnimation(AActor* Target)
-{
-	InterpFunction.BindUFunction(this, FName("TimelineProgress"));
-
-	CurveTimeline.AddInterpFloat(CurveFloat, InterpFunction);
-	CurveTimeline.SetPlayRate(PlayRate);
-
-	ObjectLoc = Target->GetActorLocation();
-	ObjectRot = Target->GetActorRotation();
-
-	FOnTimelineEvent FinishedEvent;
-	FinishedEvent.BindUFunction(this, FName("InspectFinished"));
-	CurveTimeline.SetTimelineFinishedFunc(FinishedEvent);
-
-	CurveTimeline.PlayFromStart();
-}
-
-
-void APlayerCharacter::InspectFinished()
-{
-	Flip();
 }
 
 void APlayerCharacter::Flip()

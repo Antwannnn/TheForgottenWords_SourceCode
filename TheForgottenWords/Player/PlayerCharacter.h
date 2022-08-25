@@ -54,13 +54,10 @@ public:
 		void PlayCameraShake(float Scale);
 
 	UFUNCTION()
-		void TimelineProgress(float Value);
+		void LookRight(float Value);
 
-	UFUNCTION(BlueprintCallable)
-		void TurnLeft(float Value);
-
-	UFUNCTION(BlueprintCallable)
-		void TurnUp(float Value);
+	UFUNCTION()
+		void LookUp(float Value);
 
 	UFUNCTION()
 		void Flip();
@@ -72,24 +69,11 @@ public:
 
 	bool bInteracting = false;
 
-	void DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget, int index);
-
-	void DisplayWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget);
-
 	UPROPERTY(EditAnywhere, Category = "CameraManager")
 		TSubclassOf<UCameraShakeBase> CameraShake;
 
 	UPROPERTY(BlueprintReadOnly)
 		bool bZoom = false;
-
-	UPROPERTY(EditAnywhere, Category = "Inspection")
-		UCurveFloat* CurveFloat;
-
-	UPROPERTY(EditAnywhere, Category = "Inspection")
-		float PlayRate = 1.0f;
-
-	UPROPERTY()
-		float FadeIn;
 
 	UFUNCTION()
 		void OnBeginOverlap(class UPrimitiveComponent* HitComp, class AActor* OtherActor,
@@ -100,22 +84,6 @@ protected:
 	virtual void BeginPlay() override;
 
 	AActor* TargetActor;
-
-	UFUNCTION()
-		void PlayInspectionAnimation(AActor* Target);
-
-	
-
-	FTimeline CurveTimeline;
-
-	FOnTimelineFloat InterpFunction;
-
-	FVector ObjectLoc;
-	FRotator ObjectRot;
-	FRotator NewRot;
-
-	UFUNCTION()
-		void InspectFinished();
 
 
 

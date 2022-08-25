@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "Components/TimelineComponent.h"
 #include "UObject/Interface.h"
+
+#include "Blueprint/UserWidget.h"
+
 #include "GameplayEvent.generated.h"
 
 UENUM()
@@ -32,10 +35,13 @@ class THEFORGOTTENWORDS_API IGameplayEvent
 
 public:
 
-	//Every Method needed to perform in-game actions.
+	//Every necessary methods to perform in-game actions.
+	//Level loading related methods
 	void LoadSubLevel(const UObject* WorldContextObject, FString SubLevelName);
-
 	void UnloadSubLevel(const UObject* WorldContextObject, FString SubLevelName);
+
+	//Widget relate methods
+	void ConstructWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget, UWorld* World);
 
 	//LinetraceByChannel method overloading
 	AActor* LinetraceByChannel(float InTraceDistance, UWorld* World, AController* Controller);

@@ -83,7 +83,7 @@ void AInteractableItem::PlayTransformTimeline()
 	}
 }
 
-void AInteractableItem::ConstructWidget()
+void AInteractableItem::DisplayTextWidget()
 {
 
 	if (IsValid(InteractionWidgetClass))

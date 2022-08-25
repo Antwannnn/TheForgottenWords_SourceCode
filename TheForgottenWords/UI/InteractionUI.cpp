@@ -6,6 +6,7 @@
 void UInteractionUI::NativeConstruct()
 {
 	Super::NativeConstruct();
+
 }
 
 

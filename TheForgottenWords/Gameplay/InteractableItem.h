@@ -47,7 +47,7 @@ public:
 	UFUNCTION()
 		void TimerMethod();
 
-	void ConstructWidget();
+	void DisplayTextWidget();
 
 
 protected:

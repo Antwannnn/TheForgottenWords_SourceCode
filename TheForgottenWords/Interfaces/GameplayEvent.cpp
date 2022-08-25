@@ -65,6 +65,19 @@ AActor* IGameplayEvent::LinetraceByChannel(float InTraceDistance, UWorld* World,
 
 }
 
+void IGameplayEvent::ConstructWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget, UWorld* World)
+{
+	if (IsValid(WidgetClass))
+	{
+		Widget = CreateWidget(World, WidgetClass);
+
+		if (Widget != nullptr)
+		{
+			Widget->AddToViewport();
+		}
+	}
+}
+
 
 
 

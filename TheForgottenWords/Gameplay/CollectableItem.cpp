@@ -28,6 +28,54 @@ void ACollectableItem::PlayTakeSound()
 
 }
 
+void ACollectableItem::TimelineProgress(float Value)
+{
+	FadeIn = Value;
+	const FVector NewLocation = FMath::Lerp(ObjectLoc, ViewLocation, FadeIn);
+	const FRotator NewRotation = FMath::Lerp(ObjectRot, NewRot, FadeIn);
+	SetActorLocationAndRotation(NewLocation, NewRotation);
+	
+}
+
+void ACollectableItem::PlayInspectionAnimation(FVector Location)
+{
+	if (CurveFloat)
+	{
+		ViewLocation = Location;
+
+		InterpFunction.BindUFunction(this, FName("TimelineProgress"));
+
+		CurveTimeline.AddInterpFloat(CurveFloat, InterpFunction);
+		CurveTimeline.SetPlayRate(PlayRate);
+
+		ObjectLoc = GetActorLocation();
+		ObjectRot = GetActorRotation();
+
+		CurveTimeline.SetTimelineFinishedFunc(FinishedEvent);
+
+		CurveTimeline.PlayFromStart();
+	}
+	
+}
+
+void ACollectableItem::TurnUp(float Value)
+{
+	const FRotator YawRotation(Value, 0.0f, 0.0f);
+	const FRotator CombinedRotators = YawRotation + GetActorRotation();
+	SetActorRotation(CombinedRotators);
+}
+
+void ACollectableItem::TurnLeft(float Value)
+{
+	const FRotator YawRotation(0.0f, (Value * -1.0f), 0.0f);
+	const FRotator CombinedRotators = YawRotation + GetActorRotation();
+	NewRot = CombinedRotators;
+	SetActorRotation(CombinedRotators);
+}
+
+
+
+
 // Called when the game starts or when spawned
 void ACollectableItem::BeginPlay()
 {
@@ -40,6 +88,8 @@ void ACollectableItem::BeginPlay()
 void ACollectableItem::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	CurveTimeline.TickTimeline(DeltaTime);
 
 }
 

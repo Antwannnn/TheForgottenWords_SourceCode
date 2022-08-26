@@ -10,6 +10,7 @@
 #include "Components/StaticMeshComponent.h"
 #include <TheForgottenWords/Gameplay/InteractableItem.h>
 #include <TheForgottenWords/Gameplay/CollectableItem.h>
+#include <TheForgottenWords/Interfaces/GameplayEvents.h>
 #include "Camera/CameraComponent.h"
 #include <TheForgottenWords/Interfaces/GameplayEvent.h>
 #include "Components/SphereComponent.h"

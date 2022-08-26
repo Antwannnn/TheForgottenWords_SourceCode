@@ -4,22 +4,30 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Misc/OutputDeviceNull.h"
+#include "Sound/SoundAttenuation.h"
 #include <TheForgottenWords/Player/PlayerCharacter.h>
-#include <TheForgottenWords/Interfaces/GameplayEvent.h>
+#include <TheForgottenWords/Interfaces/GameplayEvents.h>
 #include "Components/BoxComponent.h"
+#include "TheForgottenWords/Interfaces/GameplayEvents.h"
 
 #include "BoxTriggerVolume.generated.h"
 
 
 UCLASS()
-class THEFORGOTTENWORDS_API ABoxTriggerVolume : public AActor, public IGameplayEvent 
+class THEFORGOTTENWORDS_API ABoxTriggerVolume : public AActor 
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
 	ABoxTriggerVolume();
+
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	void CallFunctionByEnumItem();
 
 	UPROPERTY(EditAnywhere, Category = Functions)
 		bool Repeat;
@@ -28,14 +36,17 @@ public:
 		TEnumAsByte<EGameplayEvent> Selector;
 
 	//Level Loading an Unloading
-	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition="Selector == EGameplayEvent::GE_LoadSubLevel || Selector == EGameplayEvent::GE_UnloadSubLevel", EditConditionHides))
+	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition = "Selector == EGameplayEvent::GE_LoadSubLevel || Selector == EGameplayEvent::GE_UnloadSubLevel", EditConditionHides))
 		FString SubLevelName;
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere, Category = Sound)
+		USoundBase* TriggerSound;
 
-	void CallFunctionByEnumItem();
+	UPROPERTY(EditAnywhere, Category = Sound)
+		USoundAttenuation* TriggerSoundAttenuation;
+
+	UPROPERTY(EditAnywhere, Category = Sound, meta = (EditCondition = "TriggerSound != nullptr", EditConditionHides))
+		FVector SoundLocation;
 
 	UFUNCTION(CallInEditor)
 		void OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent*

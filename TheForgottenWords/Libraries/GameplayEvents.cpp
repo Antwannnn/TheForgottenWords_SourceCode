@@ -1,17 +1,16 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "GameplayEvent.h"
-#include "Engine/LevelStreaming.h"
-#include "Kismet/GameplayStatics.h"
+
+#include <TheForgottenWords/Interfaces/GameplayEvents.h>
 
 //Level Loading / Unloading Section
-void IGameplayEvent::LoadSubLevel(const UObject* WorldContextObject, FString SubLevelName)
+void UGameplayEvents::LoadSubLevel(const UObject* WorldContextObject, FString SubLevelName, FLatentActionInfo LatentInfo)
 {
 	if (SubLevelName != "None")	UGameplayStatics::LoadStreamLevel(WorldContextObject, FName(SubLevelName), true, true, LatentInfo);
 
 }
 
-void IGameplayEvent::UnloadSubLevel(const UObject* WorldContextObject, FString SubLevelName)
+void UGameplayEvents::UnloadSubLevel(const UObject* WorldContextObject, FString SubLevelName, FLatentActionInfo LatentInfo)
 {
 	if (SubLevelName != "None") UGameplayStatics::UnloadStreamLevel(WorldContextObject, FName(SubLevelName), LatentInfo, true);
 }
@@ -26,7 +25,7 @@ void IGameplayEvent::UnloadSubLevel(const UObject* WorldContextObject, FString S
 */
 
 //Linetrace Section
-AActor* IGameplayEvent::LinetraceByChannel(float InTraceDistance, UWorld* World, AController* Controller)
+AActor* UGameplayEvents::LinetraceByChannel(float InTraceDistance, UWorld* World, AController* Controller)
 {
 	FVector Location;
 	FRotator Rotation;
@@ -41,13 +40,13 @@ AActor* IGameplayEvent::LinetraceByChannel(float InTraceDistance, UWorld* World,
 
 	bool bHit = World->LineTraceSingleByChannel(HitResult, StartPoint, EndPoint, ECC_Visibility, TraceParams);
 
-		if (bHit)
-			return HitResult.GetActor();
-		else
-			return nullptr;
+	if (bHit)
+		return HitResult.GetActor();
+	else
+		return nullptr;
 }
 
-AActor* IGameplayEvent::LinetraceByChannel(float InTraceDistance, UWorld* World, FVector Location, FRotator Rotation)
+AActor* UGameplayEvents::LinetraceByChannel(float InTraceDistance, UWorld* World, FVector Location, FRotator Rotation)
 {
 	FHitResult HitResult;
 
@@ -65,7 +64,7 @@ AActor* IGameplayEvent::LinetraceByChannel(float InTraceDistance, UWorld* World,
 
 }
 
-void IGameplayEvent::ConstructWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget, UWorld* World)
+void UGameplayEvents::ConstructWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget, UWorld* World)
 {
 	if (IsValid(WidgetClass))
 	{
@@ -77,8 +76,3 @@ void IGameplayEvent::ConstructWidget(TSubclassOf<UUserWidget> WidgetClass, UUser
 		}
 	}
 }
-
-
-
-
-

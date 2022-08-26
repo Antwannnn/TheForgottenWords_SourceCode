@@ -51,19 +51,19 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	if (!bZoom)
 	{
-		TargetActor = GameplayEvent->LinetraceByChannel(125, GetWorld(), GetController());
+		TargetActor = UGameplayEvents::LinetraceByChannel(125, GetWorld(), GetController());
 
 		if (TargetActor)
 		{
 			if (Cast<AInteractableItem>(TargetActor))
 			{
 				SelectedIndex = 1;
-				GameplayEvent->ConstructWidget(Interaction_Widget_Class, Interaction_Widget, GetWorld());
+				UGameplayEvents::ConstructWidget(Interaction_Widget_Class, Interaction_Widget, GetWorld());
 			}
 			else if (Cast<ACollectableItem>(TargetActor))
 			{
 				SelectedIndex = 0;
-				GameplayEvent->ConstructWidget(Interaction_Widget_Class, Interaction_Widget, GetWorld());
+				UGameplayEvents::ConstructWidget(Interaction_Widget_Class, Interaction_Widget, GetWorld());
 			}
 		}
 	}
@@ -112,7 +112,7 @@ void APlayerCharacter::InteractPressed()
 	{
 		if (!bZoom)
 		{	
-			TargetActor = GameplayEvent->LinetraceByChannel(125, GetWorld(), GetController());
+			TargetActor = UGameplayEvents::LinetraceByChannel(125, GetWorld(), GetController());
 
 			if (ACollectableItem* CollectableItemCheck = Cast<ACollectableItem>(TargetActor))
 			{
@@ -127,8 +127,8 @@ void APlayerCharacter::InteractPressed()
 			{
 				if (!InteractableItemCheck->bDelay)
 				{
-						InteractableItemCheck->DisplayTextWidget();
-						InteractableItemCheck->PlayTransformTimeline();
+					InteractableItemCheck->DisplayTextWidget();
+					InteractableItemCheck->PlayTransformTimeline();
 				}
 				
 			}

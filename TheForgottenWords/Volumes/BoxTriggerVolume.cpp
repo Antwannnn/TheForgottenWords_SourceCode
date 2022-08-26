@@ -26,12 +26,24 @@ void ABoxTriggerVolume::OnBeginOverlap(UPrimitiveComponent* HitComp, AActor* Oth
 	{
 		CallFunctionByEnumItem();
 		if(!Repeat)
-		K2_DestroyActor();
+		{
+			K2_DestroyActor();
+		}
+		const FVector FinalLocation = SoundLocation + UGameplayStatics::GetPlayerCharacter(this, 0)->GetActorLocation();
+		UGameplayStatics::PlaySoundAtLocation(this, TriggerSound, FinalLocation, 1, 1, 0, TriggerSoundAttenuation);
+
 	}
 
 
 }
-
+void ABoxTriggerVolume::CallFunctionByEnumItem()
+{
+	switch (Selector)
+	{
+	case GE_LoadSubLevel:  return UGameplayEvents::LoadSubLevel(this, SubLevelName, FLatentActionInfo());
+	case GE_UnloadSubLevel:  return UGameplayEvents::UnloadSubLevel(this, SubLevelName, FLatentActionInfo());
+	}
+}
 
 
 // Called when the game starts or when spawned
@@ -41,15 +53,6 @@ void ABoxTriggerVolume::BeginPlay()
 
 	BoxCollision->OnComponentBeginOverlap.AddDynamic(this, &ABoxTriggerVolume::OnBeginOverlap);
 	
-}
-
-void ABoxTriggerVolume::CallFunctionByEnumItem()
-{
-	switch (Selector)
-	{
-	case GE_LoadSubLevel:  return IGameplayEvent::LoadSubLevel(this, SubLevelName);
-	case GE_UnloadSubLevel:  return IGameplayEvent::UnloadSubLevel(this, SubLevelName);
-	}
 }
 
 // Called every frame

@@ -2,7 +2,7 @@
 
 #include "InteractableItem.h"
 #include "Components/StaticMeshComponent.h"
-
+#include "Kismet/GameplayStatics.h"
 
 
 // Sets default values
@@ -69,6 +69,7 @@ void AInteractableItem::PlayTransformTimeline()
 			if(!bDoOnce)
 			{
 				CurveTimeline.PlayFromStart();
+				UGameplayStatics::PlaySoundAtLocation(this, ItemSound, StartLoc, .5f, 1, 0, SoundAttenuation);
 				bDoOnce = true;
 			}
 			
@@ -76,6 +77,7 @@ void AInteractableItem::PlayTransformTimeline()
 		else
 		{
 			CurveTimeline.PlayFromStart();
+			UGameplayStatics::PlaySoundAtLocation(this, ItemSound, StartLoc, .5f, 1, 0, SoundAttenuation);
 		}
 
 

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/TimelineComponent.h"
 #include "GameFramework/Actor.h"
+#include "Sound/SoundAttenuation.h"
 #include "TimerManager.h"
 #include <TheForgottenWords/UI/InteractionUI.h>
 
@@ -32,35 +33,32 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void PlayTransformTimeline();
 
-	UPROPERTY(EditAnywhere, meta = (EditCondition = "ApplyTransform"), Category = "Timeline")
-		FTransform ObjectTransform;
+	FVector StartLoc;
 
-	FTimerHandle TH_WidgetDelayManager;
+	UPROPERTY(EditAnywhere, Category = "Sound")
+		USoundBase* ItemSound;
 
-	UPROPERTY(EditAnywhere, Category = "UI HUD")
-		TSubclassOf<UUserWidget> InteractionWidgetClass;
-
-	UInteractionUI* InteractionWidget;
+	UPROPERTY(EditAnywhere, Category = "Sound")
+		USoundAttenuation* SoundAttenuation;
 
 	bool bDelay = false;
 
 	UFUNCTION()
 		void TimerMethod();
 
-	void DisplayTextWidget();
+	UFUNCTION()
+		void DisplayTextWidget();
 
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "UI HUD")
-		FText Text;
-
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Timeline")
 		bool ApplyTransform;
 
-	FTimeline CurveTimeline;
+	UPROPERTY(EditAnywhere, meta = (EditCondition = "ApplyTransform"), Category = "Timeline")
+		FTransform ObjectTransform;
 
 	UPROPERTY(EditAnywhere, Category = "Timeline", meta = (EditCondition = "ApplyTransform"))
 		UCurveFloat* CurveFloat;
@@ -68,11 +66,22 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Timeline", meta = (EditCondition = "ApplyTransform"))
 		float Rate;
 
+	UPROPERTY(EditAnywhere, Category = "UI HUD")
+		TSubclassOf<UUserWidget> InteractionWidgetClass;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "UI HUD")
+		FText Text;
+
+	FTimeline CurveTimeline;
+
+	FTimerHandle TH_WidgetDelayManager;
+
+	UInteractionUI* InteractionWidget;
+
 	UPROPERTY(EditAnywhere, Category = "Timeline", meta = (EditCondition = "ApplyTransform"))
 		bool DoOnce;
-	bool bDoOnce;
 
-	FVector StartLoc;
+	bool bDoOnce;
 
 	FVector EndLoc;
 

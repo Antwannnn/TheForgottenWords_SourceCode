@@ -6,9 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Sound/SoundAttenuation.h"
 #include <TheForgottenWords/Player/PlayerCharacter.h>
-#include <TheForgottenWords/Interfaces/GameplayEvents.h>
+#include <TheForgottenWords/Libraries//GameplayEvents.h>
 #include "Components/BoxComponent.h"
-#include "TheForgottenWords/Interfaces/GameplayEvents.h"
 
 #include "BoxTriggerVolume.generated.h"
 

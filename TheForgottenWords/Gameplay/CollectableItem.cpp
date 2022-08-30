@@ -8,7 +8,7 @@
 // Sets default values
 ACollectableItem::ACollectableItem()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	DefaultSceneRoot = CreateDefaultSubobject<USceneComponent>(TEXT("DefaultSceneRoot"));
@@ -24,7 +24,7 @@ void ACollectableItem::PlayTakeSound()
 	{
 		UGameplayStatics::PlaySound2D(this, TakeSound);
 	}
-	
+
 
 }
 
@@ -34,7 +34,7 @@ void ACollectableItem::TimelineProgress(float Value)
 	const FVector NewLocation = FMath::Lerp(ObjectLoc, ViewLocation, FadeIn);
 	const FRotator NewRotation = FMath::Lerp(ObjectRot, NewRot, FadeIn);
 	SetActorLocationAndRotation(NewLocation, NewRotation);
-	
+
 }
 
 void ACollectableItem::PlayInspectionAnimation(FVector Location)
@@ -55,7 +55,7 @@ void ACollectableItem::PlayInspectionAnimation(FVector Location)
 
 		CurveTimeline.PlayFromStart();
 	}
-	
+
 }
 
 void ACollectableItem::TurnUp(float Value)
@@ -81,7 +81,7 @@ void ACollectableItem::BeginPlay()
 {
 
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -92,4 +92,3 @@ void ACollectableItem::Tick(float DeltaTime)
 	CurveTimeline.TickTimeline(DeltaTime);
 
 }
-

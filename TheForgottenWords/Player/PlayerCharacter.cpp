@@ -11,7 +11,7 @@
 // Sets default values
 APlayerCharacter::APlayerCharacter()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	GetCharacterMovement()->MaxWalkSpeed = (250.0f);
@@ -58,12 +58,12 @@ void APlayerCharacter::Tick(float DeltaTime)
 			if (Cast<AInteractableItem>(TargetActor))
 			{
 				SelectedIndex = 1;
-				UGameplayEvents::ConstructWidget(Interaction_Widget_Class, Interaction_Widget, GetWorld());
+				ConstructWidget(Interaction_Widget_Class, Interaction_Widget, GetWorld());
 			}
 			else if (Cast<ACollectableItem>(TargetActor))
 			{
 				SelectedIndex = 0;
-				UGameplayEvents::ConstructWidget(Interaction_Widget_Class, Interaction_Widget, GetWorld());
+				ConstructWidget(Interaction_Widget_Class, Interaction_Widget, GetWorld());
 			}
 		}
 	}
@@ -111,7 +111,7 @@ void APlayerCharacter::InteractPressed()
 	if (!bInteracting)
 	{
 		if (!bZoom)
-		{	
+		{
 			TargetActor = UGameplayEvents::LinetraceByChannel(125, GetWorld(), GetController());
 
 			if (ACollectableItem* CollectableItemCheck = Cast<ACollectableItem>(TargetActor))
@@ -130,7 +130,7 @@ void APlayerCharacter::InteractPressed()
 					InteractableItemCheck->DisplayTextWidget();
 					InteractableItemCheck->PlayTransformTimeline();
 				}
-				
+
 			}
 		}
 		else
@@ -166,7 +166,7 @@ void APlayerCharacter::LookRight(float Value)
 			CollectableItemCheck->TurnLeft(Value);
 		}
 	}
-	else 
+	else
 	{
 		AddControllerYawInput(Value);
 	}
@@ -182,7 +182,7 @@ void APlayerCharacter::LookUp(float Value)
 			CollectableItemCheck->TurnUp(Value);
 		}
 	}
-	else 
+	else
 	{
 		AddControllerPitchInput(Value);
 	}
@@ -206,6 +206,15 @@ void APlayerCharacter::Flip()
 	}
 }
 
+void APlayerCharacter::ConstructWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget, UWorld* World)
+{
+	if (IsValid(WidgetClass))
+	{
+		Widget = CreateWidget(World, WidgetClass);
 
-
-
+		if (Widget != nullptr)
+		{
+			Widget->AddToViewport();
+		}
+	}
+}

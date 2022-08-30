@@ -41,6 +41,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Sound")
 		USoundAttenuation* SoundAttenuation;
 
+	FOnTimelineEvent FinishedEvent;
+
+	UFUNCTION()
+	void TimelineFinished();
+
 	bool bDelay = false;
 
 	UFUNCTION()
@@ -72,9 +77,12 @@ protected:
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "UI HUD")
 		FText Text;
 
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "UI HUD")
+		float Delay;
+
 	FTimeline CurveTimeline;
 
-	FTimerHandle TH_WidgetDelayManager;
+	FTimerHandle TH_DelayManager;
 
 	UInteractionUI* InteractionWidget;
 

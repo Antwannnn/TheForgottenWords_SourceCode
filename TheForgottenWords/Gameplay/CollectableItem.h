@@ -14,8 +14,8 @@ UCLASS()
 class THEFORGOTTENWORDS_API ACollectableItem : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	ACollectableItem();
 
@@ -81,7 +81,7 @@ protected:
 
 	FRotator NewRot;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 

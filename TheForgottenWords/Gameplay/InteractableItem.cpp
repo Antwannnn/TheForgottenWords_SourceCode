@@ -68,9 +68,10 @@ void AInteractableItem::PlayTransformTimeline()
 		{
 			if(!bDoOnce)
 			{
+				CurveTimeline.SetTimelineFinishedFunc(FinishedEvent);
+				bDoOnce = true;
 				CurveTimeline.PlayFromStart();
 				UGameplayStatics::PlaySoundAtLocation(this, ItemSound, StartLoc, .5f, 1, 0, SoundAttenuation);
-				bDoOnce = true;
 			}
 			
 		}
@@ -99,7 +100,7 @@ void AInteractableItem::DisplayTextWidget()
 			{
 				bDelay = true;
 				InteractionWidget->AddToViewport();
-				GetWorld()->GetTimerManager().SetTimer(TH_WidgetDelayManager, this, &AInteractableItem::TimerMethod, 3, false);
+				GetWorld()->GetTimerManager().SetTimer(TH_DelayManager, this, &AInteractableItem::TimerMethod, Delay, false);
 
 			}
 		}
@@ -116,7 +117,9 @@ void AInteractableItem::TimerMethod()
 		bDelay = false;
 	}
 
+}
 
-
-
+void AInteractableItem::TimelineFinished()
+{
+	bDoOnce = true;
 }

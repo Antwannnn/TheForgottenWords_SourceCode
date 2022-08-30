@@ -26,20 +26,21 @@ class THEFORGOTTENWORDS_API UGameplayEvents : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
-public:
-
 	//Every necessary methods to perform in-game actions.
 	//Level loading related methods
+
+public:
+	UFUNCTION(BlueprintCallable)
 	static void LoadSubLevel(const UObject* WorldContextObject, FString SubLevelName, FLatentActionInfo LatentInfo);
+	UFUNCTION(BlueprintCallable)
 	static void UnloadSubLevel(const UObject* WorldContextObject, FString SubLevelName, FLatentActionInfo LatentInfo);
 
-	//Widget relate methods
-	static void ConstructWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget, UWorld* World);
-
 	//LinetraceByChannel method overloading
+	UFUNCTION(BlueprintCallable)
 	static AActor* LinetraceByChannel(float InTraceDistance, UWorld* World, AController* Controller);
 	static AActor* LinetraceByChannel(float InTraceDistance, UWorld* World, FVector Location, FRotator Rotation);
 
+protected:
 
 
 private:

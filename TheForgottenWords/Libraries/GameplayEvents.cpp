@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include <TheForgottenWords/Interfaces/GameplayEvents.h>
+#include <TheForgottenWords/Libraries/GameplayEvents.h>
+#include "DrawDebugHelpers.h"
 
 //Level Loading / Unloading Section
 void UGameplayEvents::LoadSubLevel(const UObject* WorldContextObject, FString SubLevelName, FLatentActionInfo LatentInfo)
@@ -61,18 +62,4 @@ AActor* UGameplayEvents::LinetraceByChannel(float InTraceDistance, UWorld* World
 		return HitResult.GetActor();
 	else
 		return nullptr;
-
-}
-
-void UGameplayEvents::ConstructWidget(TSubclassOf<UUserWidget> WidgetClass, UUserWidget* Widget, UWorld* World)
-{
-	if (IsValid(WidgetClass))
-	{
-		Widget = CreateWidget(World, WidgetClass);
-
-		if (Widget != nullptr)
-		{
-			Widget->AddToViewport();
-		}
-	}
 }

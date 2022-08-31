@@ -33,8 +33,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void PlayTransformTimeline();
 
-	FVector StartLoc;
-
 	UPROPERTY(EditAnywhere, Category = "Sound")
 		USoundBase* ItemSound;
 
@@ -90,6 +88,8 @@ protected:
 		bool DoOnce;
 
 	bool bDoOnce;
+
+	FVector StartLoc;
 
 	FVector EndLoc;
 

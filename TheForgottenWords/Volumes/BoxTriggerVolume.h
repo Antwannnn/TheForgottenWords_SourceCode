@@ -34,9 +34,57 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Functions)
 		TEnumAsByte<EGameplayEvent> Selector;
 
+	//
+
 	//Level Loading an Unloading
 	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition = "Selector == EGameplayEvent::GE_LoadSubLevel || Selector == EGameplayEvent::GE_UnloadSubLevel", EditConditionHides))
 		FString SubLevelName;
+
+	//Actor Spawning
+	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition = "Selector == EGameplayEvent::GE_SpawnActor", EditConditionHides))
+		TSubclassOf<AActor> ActorToSpawn;
+
+	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition = "Selector == EGameplayEvent::GE_SpawnActor", EditConditionHides))
+		FVector SpawnLocation;
+
+	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition = "Selector == EGameplayEvent::GE_SpawnActor", EditConditionHides))
+		FVector Scale;
+
+	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition = "Selector == EGameplayEvent::GE_SpawnActor", EditConditionHides))
+		FRotator SpawnRotation;
+
+	//Actor moving
+	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition = "Selector == EGameplayEvent::GE_SpawnActor", EditConditionHides))
+		bool Hidden;
+
+	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition = "Selector == EGameplayEvent::GE_MoveActor", EditConditionHides))
+		AActor* ActorToMove;
+
+	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition = "Selector == EGameplayEvent::GE_MoveActor", EditConditionHides))
+		FTransform ObjectTransform;
+
+	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition = "Selector == EGameplayEvent::GE_MoveActor", EditConditionHides))
+		UCurveFloat* CurveFloat;
+
+	UPROPERTY(EditAnywhere, Category = Functions, meta = (EditCondition = "Selector == EGameplayEvent::GE_MoveActor", EditConditionHides))
+		float PlayRate;
+
+	FTimeline Timeline;
+	FOnTimelineFloat InterpFunction;
+
+	FVector StartLoc;
+	FVector EndLoc;
+
+	FRotator StartRot;
+	FRotator EndRot;
+
+	UFUNCTION()
+		void MoveActorTimeline();
+
+	UFUNCTION()
+		void TimelineProgress(float Value);
+
+	//
 
 	UPROPERTY(EditAnywhere, Category = Sound)
 		USoundBase* TriggerSound;
@@ -56,10 +104,10 @@ protected:
 
 
 
-public:	
+public:
+
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
 
 private:
 

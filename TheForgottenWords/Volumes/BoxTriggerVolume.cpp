@@ -42,6 +42,8 @@ void ABoxTriggerVolume::CallFunctionByEnumItem()
 	{
 	case GE_LoadSubLevel:  return UGameplayEvents::LoadSubLevel(this, SubLevelName, FLatentActionInfo());
 	case GE_UnloadSubLevel:  return UGameplayEvents::UnloadSubLevel(this, SubLevelName, FLatentActionInfo());
+	case GE_SpawnActor: return UGameplayEvents::SpawnActor(ActorToSpawn, GetWorld(), SpawnLocation, SpawnRotation, Scale);
+	case GE_MoveActor: return MoveActorTimeline();
 	}
 }
 
@@ -60,7 +62,45 @@ void ABoxTriggerVolume::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	Timeline.TickTimeline(DeltaTime);
+
 }
+
+void ABoxTriggerVolume::MoveActorTimeline()
+{
+	if(CurveFloat != nullptr && ActorToMove)
+	{
+		InterpFunction.BindUFunction(this, FName("TimelineProgress"));
+
+		Timeline.AddInterpFloat(CurveFloat, InterpFunction);
+		Timeline.SetPlayRate(PlayRate);
+
+		StartLoc = EndLoc = ActorToMove->GetActorLocation();
+		EndLoc.X += ObjectTransform.GetLocation().X;
+		EndLoc.Y += ObjectTransform.GetLocation().Y;
+		EndLoc.Z += ObjectTransform.GetLocation().Z;
+
+		StartRot = EndRot = ActorToMove->GetActorRotation();
+
+		FRotator ToRotator = (FRotator)ObjectTransform.GetRotation();
+
+		EndRot.Pitch += ToRotator.Pitch;
+		EndRot.Yaw += ToRotator.Yaw;
+		EndRot.Roll += ToRotator.Roll;
+
+		Timeline.Play();
+	}
+
+}
+
+void ABoxTriggerVolume::TimelineProgress(float Value)
+{
+	FVector NewLocation = FMath::Lerp(StartLoc, EndLoc, Value);
+	FRotator NewRotator = FMath::Lerp(StartRot, EndRot, Value);
+	ActorToMove->SetActorLocation(NewLocation);
+	ActorToMove->SetActorRotation(NewRotator);
+}
+
 
 
 

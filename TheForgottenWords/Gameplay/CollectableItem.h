@@ -19,33 +19,30 @@ public:
 	// Sets default values for this actor's properties
 	ACollectableItem();
 
+	//All the uproperty that I will be using for the collectible item.
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Inspection)
+		FText Title;
 
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Rendering)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Inspection)
+		FText Description;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = Inspection)
+		bool bTakeable = false;
+
+	UPROPERTY(EditAnywhere, Category = Inspection, meta = (EditCondition = "bTakeable", EditConditionHides))
+		USoundBase* TakeSound;
+
+	UPROPERTY(EditAnywhere, Category = Inspection)
+		UCurveFloat* CurveFloat;
+
+	UPROPERTY(EditAnywhere, Category = Inspection)
+		float PlayRate = 1.0f;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 		UStaticMeshComponent* Mesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		USceneComponent* DefaultSceneRoot;
-
-
-	//All the uproperty that I will be using for the collectible item.
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		FText Title;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		FText Description;
-
-	UPROPERTY(BlueprintReadOnly, EditAnywhere)
-		bool bTakeable = false;
-
-
-	UPROPERTY(EditAnywhere, Category = "Inspection")
-		UCurveFloat* CurveFloat;
-
-	UPROPERTY(EditAnywhere, Category = "Inspection")
-		float PlayRate = 1.0f;
-
-	UPROPERTY(EditAnywhere, meta = (EditCondition = "bTakeable"))
-		USoundBase* TakeSound;
 
 	UFUNCTION(BlueprintCallable)
 		void PlayTakeSound();

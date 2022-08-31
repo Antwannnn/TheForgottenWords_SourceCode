@@ -63,3 +63,24 @@ AActor* UGameplayEvents::LinetraceByChannel(float InTraceDistance, UWorld* World
 	else
 		return nullptr;
 }
+
+void UGameplayEvents::SpawnActor(TSubclassOf<AActor> InActor, UWorld* World, FVector InLoc, FRotator InRot, FVector InScale3D)
+{
+	if (InActor != nullptr)
+	{
+		World->SpawnActor<AActor>(InActor, InLoc, InRot);
+	}
+
+}
+
+
+void UGameplayEvents::SpawnActor(TSubclassOf<AActor> InActor, UWorld* World, FVector InLoc, FRotator InRot, FVector InScale3D, FActorSpawnParameters SpawnParams)
+{
+
+	if (InActor != nullptr)
+	{
+		World->SpawnActor<AActor>(InActor, InLoc, InRot, SpawnParams);
+	}
+
+}
+

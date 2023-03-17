@@ -70,12 +70,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+private:
 	float FadeIn;
 
 	FOnTimelineFloat InterpFunction;
 	FVector ObjectLoc;
 	FRotator ObjectRot;
-
 	FRotator NewRot;
 
 public:
